@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/spolozova/frontend-project-lvl4#readme",
   "dependencies": {
+    "axios": "*",
     "bootstrap": "^4.6.0",
     "core-js": "^3.12.1",
     "debug": "^4.3.1",
@@ -34,6 +35,7 @@
     "fastify-sensible": "^3.1.1",
     "fastify-socket.io": "^2.0.0",
     "fastify-static": "^4.0.1",
+    "formik": "*",
     "http-errors": "^1.8.0",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
@@ -41,6 +43,10 @@
     "point-of-view": "^4.14.0",
     "popper.js": "^1.16.1",
     "pug": "^3.0.2",
+    "react": "*",
+    "react-bootstrap": "*",
+    "react-dom": "*",
+    "react-router-dom": "^5.2.0",
     "regenerator-runtime": "^0.13.7"
   },
   "devDependencies": {
