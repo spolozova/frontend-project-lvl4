@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "[![Actions Status](https://github.com/spolozova/frontend-project-lvl4/workflows/hexlet-check/badge.svg)](https://github.com/spolozova/frontend-project-lvl4/actions)",
-  "main": "src/index.js",
+  "main": "src/index.jsx",
   "type": "module",
   "engines": {
     "node": "15.x"
@@ -37,6 +37,7 @@
     "fastify-static": "^4.0.1",
     "formik": "^2.2.8",
     "http-errors": "^1.8.0",
+    "immer": "^9.0.2",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "pino-pretty": "^4.8.0",
@@ -48,6 +49,7 @@
     "react-dom": "*",
     "react-router-dom": "^5.2.0",
     "regenerator-runtime": "^0.13.7",
+    "use-immer": "^0.5.2",
     "yup": "^0.32.9"
   },
   "devDependencies": {
