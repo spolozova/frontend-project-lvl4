@@ -11,8 +11,7 @@ import { Button, Navbar } from 'react-bootstrap';
 import ChatPage from './ChatPage.jsx';
 import LoginPage from './LoginPage.jsx';
 import NotFoundPage from './NotFoundPage.jsx';
-import authContext from '../contexts/index.jsx';
-import useAuth from '../hooks/index.jsx';
+import AuthContext from '../contexts/index.jsx';
 
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -20,22 +19,23 @@ const AuthProvider = ({ children }) => {
   const logIn = () => setLoggedIn(true);
   const logOut = () => {
     localStorage.removeItem('userId');
+    localStorage.removeItem('username');
     setLoggedIn(false);
   };
   return (
-    <authContext.Provider value={{ loggedIn, logIn, logOut }}>
+    <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
       {children}
-    </authContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
 const ChatRoute = ({ children, path }) => {
-  const auth = useAuth();
+  const token = localStorage.getItem('userId');
 
   return (
     <Route
       path={path}
-      render={() => (auth.loggedIn
+      render={() => (token
         ? children
         : <Redirect to="/login" />)}
     />
@@ -43,8 +43,7 @@ const ChatRoute = ({ children, path }) => {
 };
 
 const AuthButton = () => {
-  const auth = useContext(authContext);
-
+  const auth = useContext(AuthContext);
   return (
     auth.loggedIn
       ? <Button onClick={auth.logOut}>Log out</Button>
@@ -57,17 +56,18 @@ const App = () => (
     <Router>
       <div className="d-flex flex-column h-100">
         <Navbar className="shadow-sm" variant="light" bg="white" expand="lg">
-          <Navbar.Brand as={Link} to="/">Hexlet Chat</Navbar.Brand>
-          <AuthButton />
+          <div className="container">
+            <Navbar.Brand as={Link} to="/">Hexlet Chat</Navbar.Brand>
+            <AuthButton />
+          </div>
         </Navbar>
-
         <Switch>
-          <ChatRoute path="/">
-            <ChatPage />
-          </ChatRoute>
           <Route path="/login">
             <LoginPage />
           </Route>
+          <ChatRoute path="/">
+            <ChatPage />
+          </ChatRoute>
           <Route path="*">
             <NotFoundPage />
           </Route>

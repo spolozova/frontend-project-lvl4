@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 // @ts-check
 
 const path = require('path');
@@ -24,6 +25,7 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin(),
   ],
+  devtool: "source-map",
   module: {
     rules: [
       {
@@ -38,6 +40,7 @@ module.exports = {
           { loader: 'css-loader' },
           { loader: 'postcss-loader' },
           { loader: 'sass-loader' },
+          { loader: "source-map-loader"},
         ],
       },
     ],

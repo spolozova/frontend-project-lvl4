@@ -4,18 +4,26 @@ root: true
 
 plugins:
   - functional
+  - react
 
 extends:
   - airbnb
   - "plugin:functional/external-recommended"
   - "plugin:functional/recommended"
+  - 'plugin:react-hooks/recommended'
 
 parser: babel-eslint
 
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: 12
+  sourceType: module
+
 env:
   browser: true
+  es2021: true
   node: true
-  jest: true
 
 settings:
   import/resolver:
@@ -32,3 +40,4 @@ rules:
   functional/functional-parameters: 0
   functional/no-try-statement: 0
   functional/no-throw-statement: 0
+  no-param-reassign: ["error", { "props": false }]
