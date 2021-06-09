@@ -2,6 +2,5 @@
 
 import { createContext } from 'react';
 
-const AuthContext = createContext({ login: null});
-
-export default AuthContext;
+export const AuthContext = createContext({ login: null });
+export const SocketContext = createContext(null);

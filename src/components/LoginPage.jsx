@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
-import useAuth from '../hooks/index.jsx';
+import { useAuth } from '../hooks/index.jsx';
 import routes from '../routes.js';
 
 const validate = (values) => {
@@ -22,7 +22,8 @@ const validate = (values) => {
 };
 
 const LoginPage = () => {
-  const { logIn } = useAuth();
+  // @ts-ignore
+  const { logIn, logOut } = useAuth();
   const [authError, setAuthState] = useState(null);
   const history = useHistory();
   const inputRef = useRef(null);
@@ -45,13 +46,13 @@ const LoginPage = () => {
       }
       try {
         const resp = await axios.post(routes.loginPath(), values);
-        console.log(resp.data);
         localStorage.setItem('userId', JSON.stringify(resp.data));
         logIn();
         history.push({ pathname: '/' });
       } catch (err) {
         if (err.isAxiosError && err.response.status === 401) {
-          setAuthState(err.message);
+          setAuthState('Неверные имя пользователя или пароль');
+          logOut();
           inputRef.current.focus();
         }
         throw err;

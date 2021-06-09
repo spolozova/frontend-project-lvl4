@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import cn from 'classnames';
 
 const Channels = () => {
+  // @ts-ignore
   const { channels, currentChannelId } = useSelector((state) => state.channelsInfo);
 
   const renderChannelsList = (channel) => {

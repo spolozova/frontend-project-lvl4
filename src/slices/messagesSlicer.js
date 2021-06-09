@@ -7,7 +7,12 @@ const messagesInfo = createSlice({
   initialState: {
     messages: [],
   },
-  reducers: {},
+  reducers: {
+    addMessage: (state, action) => {
+      const message = action.payload;
+      state.messages.push(message);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchChannels, (state, action) => {
@@ -17,4 +22,5 @@ const messagesInfo = createSlice({
   },
 });
 
+export const { addMessage } = messagesInfo.actions;
 export default messagesInfo.reducer;
