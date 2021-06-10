@@ -52,22 +52,22 @@ const Messages = () => {
     messagesListRef.current.scrollTo(0, scroll);
   }, [messages]);
 
-  // const withTimeout = (onSuccess, onTimeout, timeout) => {
-  //   let called = false;
+  const withTimeout = (onSuccess, onTimeout, timeout) => {
+    let called = false;
 
-  //   const timer = setTimeout(() => {
-  //     if (called) return;
-  //     called = true;
-  //     onTimeout();
-  //   }, timeout);
+    const timer = setTimeout(() => {
+      if (called) return;
+      called = true;
+      onTimeout();
+    }, timeout);
 
-  //   return () => {
-  //     if (called) return;
-  //     called = true;
-  //     clearTimeout(timer);
-  //     onSuccess.apply(this);
-  //   };
-  // };
+    return () => {
+      if (called) return;
+      called = true;
+      clearTimeout(timer);
+      onSuccess.apply(this);
+    };
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -81,17 +81,14 @@ const Messages = () => {
         channelId: currentChannelId,
         username,
       };
-      socket.volatile.emit('newMessage', outgoingMessage, (response) => {
-        console.log(response);
-        if (response.status === 'ok') {
-          setIsSending(false);
-          formik.resetForm();
-          messageInputRef.current.focus();
-          return;
-        }
+      socket.volatile.emit('newMessage', outgoingMessage, withTimeout(() => {
+        setIsSending(false);
+        formik.resetForm();
+        messageInputRef.current.focus();
+      }, () => {
         messageInputRef.current.focus();
         setIsSending(false);
-      });
+      }, 1000));
     },
   });
 
