@@ -80,12 +80,13 @@ const Messages = () => {
         username,
       };
       socket.volatile.emit('newMessage', outgoingMessage, (response) => {
+        console.log(response);
         if (response.status === 'ok') {
           formik.resetForm();
           messageInputRef.current.focus();
           return;
         }
-        console.log('err');
+        messageInputRef.current.focus();
       });
     },
   });
