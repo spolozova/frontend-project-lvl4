@@ -86,8 +86,8 @@ const Messages = () => {
         formik.resetForm();
         messageInputRef.current.focus();
       }, () => {
-        messageInputRef.current.focus();
         setIsSending(false);
+        messageInputRef.current.focus();
       }, 1000));
     },
   });
