@@ -44,6 +44,7 @@ const Messages = () => {
       console.log('useEffect', newMessage);
       dispatch(addMessage(newMessage));
     });
+    return () => socket.off('newMessage');
   }, [dispatch, socket]);
 
   useEffect(() => {
@@ -86,6 +87,7 @@ const Messages = () => {
           messageInputRef.current.focus();
           return;
         }
+        socket.off('newMassage');
         messageInputRef.current.focus();
       });
     },
