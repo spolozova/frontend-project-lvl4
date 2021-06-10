@@ -41,7 +41,7 @@ const Messages = () => {
   useEffect(() => {
     messageInputRef.current.focus();
     socket.on('newMessage', (newMessage) => {
-      console.log(newMessage);
+      console.log('useEffect', newMessage);
       dispatch(addMessage(newMessage));
     });
   }, [dispatch, socket]);
@@ -52,14 +52,19 @@ const Messages = () => {
   }, [messages]);
 
   // const withTimeout = (onSuccess, onTimeout, timeout) => {
+  //   let called = false;
+
   //   const timer = setTimeout(() => {
-  //     if (state === 'sent') return;
+  //     if (called) return;
+  //     called = true;
   //     onTimeout();
   //   }, timeout);
 
   //   return () => {
+  //     if (called) return;
+  //     called = true;
   //     clearTimeout(timer);
-  //     onSuccess();
+  //     onSuccess.apply(this);
   //   };
   // };
 
@@ -74,11 +79,13 @@ const Messages = () => {
         channelId: currentChannelId,
         username,
       };
-      socket.emit('newMessage', outgoingMessage, (response) => {
+      socket.volatile.emit('newMessage', outgoingMessage, (response) => {
         if (response.status === 'ok') {
           formik.resetForm();
           messageInputRef.current.focus();
+          return;
         }
+        console.log('err');
       });
     },
   });
