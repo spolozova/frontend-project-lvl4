@@ -12,6 +12,7 @@ import io from 'socket.io-client';
 import ChatPage from './ChatPage.jsx';
 import LoginPage from './LoginPage.jsx';
 import NotFoundPage from './NotFoundPage.jsx';
+import ModalComponent from './modals/index.jsx';
 import { SocketContext, AuthContext } from '../contexts/index.jsx';
 import { useAuth } from '../hooks/index.jsx';
 
@@ -62,7 +63,7 @@ const App = () => (
         <div className="d-flex flex-column h-100">
           <Navbar className="shadow-sm" variant="light" bg="white" expand="lg">
             <div className="container">
-              <Navbar.Brand as={Link} className="d-flex align-items-center" to="/">Friends Chat</Navbar.Brand>
+              <Navbar.Brand as={Link} className="d-flex align-items-center" to="/">Hexlet Chat</Navbar.Brand>
               <AuthButton />
             </div>
           </Navbar>
@@ -79,6 +80,7 @@ const App = () => (
           </Switch>
         </div>
       </Router>
+      <ModalComponent />
     </SocketContext.Provider>
   </AuthProvider>
 );

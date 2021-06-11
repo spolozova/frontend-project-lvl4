@@ -22,7 +22,6 @@ const ChatPage = () => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const dispatch = useDispatch();
   const socket = useSocket();
-
   useEffect(() => {
     setIsDataLoaded(false);
     const fetchContent = async () => {

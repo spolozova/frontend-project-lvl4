@@ -31,7 +31,7 @@ const Messages = () => {
   const { messages } = useSelector((state) => state.messagesInfo);
   // @ts-ignore
   const { channels, currentChannelId } = useSelector((state) => state.channelsInfo);
-  const { name } = channels.length === 0 ? null : _.find(channels, ['id', currentChannelId]);
+  const currentChannel = channels.length === 0 ? null : _.find(channels, ['id', currentChannelId]);
   const messageInputRef = useRef(null);
   const messagesListRef = useRef(null);
   const dispatch = useDispatch();
@@ -41,7 +41,6 @@ const Messages = () => {
   useEffect(() => {
     messageInputRef.current.focus();
     socket.on('newMessage', (newMessage) => {
-      console.log('useEffect', newMessage);
       dispatch(addMessage(newMessage));
     });
     return () => socket.off('newMessage');
@@ -91,7 +90,6 @@ const Messages = () => {
       }, 1000));
     },
   });
-
   return (
     <Col className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
@@ -99,7 +97,7 @@ const Messages = () => {
           <p className="m-0">
             <b>
               #
-              {name}
+              {currentChannel && currentChannel.name}
             </b>
           </p>
           <span className="text-muted">сообщения</span>

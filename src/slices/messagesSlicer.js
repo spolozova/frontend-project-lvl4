@@ -1,6 +1,6 @@
 // @ts-check
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchChannels } from './channelsSlicer.js';
+import { fetchChannels, removeChannel } from './channelsSlicer.js';
 
 const messagesInfo = createSlice({
   name: 'messagesInfo',
@@ -18,6 +18,10 @@ const messagesInfo = createSlice({
       .addCase(fetchChannels, (state, action) => {
         const { messages } = action.payload;
         state.messages = [...messages];
+      })
+      .addCase(removeChannel, (state, action) => {
+        const { id } = action.payload;
+        state.messages.filter((message) => message.channelId !== id);
       });
   },
 });
