@@ -2,7 +2,8 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
-import { Button, Form } from 'react-bootstrap';
+import {
+  Button, Form, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
 import { useAuth } from '../hooks/index.jsx';
@@ -25,6 +26,7 @@ const LoginPage = () => {
   // @ts-ignore
   const { logIn, logOut } = useAuth();
   const [authError, setAuthState] = useState(null);
+  const [isSending, setIsSending] = useState(false);
   const history = useHistory();
   const inputRef = useRef(null);
 
@@ -39,9 +41,11 @@ const LoginPage = () => {
     },
     onSubmit: async (values) => {
       setAuthState(null);
+      setIsSending(true);
       const error = validate(values);
       if (error) {
         setAuthState('Неверные имя пользователя или пароль');
+        setIsSending(false);
         return;
       }
       try {
@@ -55,6 +59,7 @@ const LoginPage = () => {
           logOut();
           inputRef.current.focus();
         }
+        setIsSending(false);
         throw err;
       }
     },
@@ -63,39 +68,56 @@ const LoginPage = () => {
   return (
     <div className="container-fluid flex-grow-1">
       <div className="row justify-content-center align-content-center h-100">
-        <Form onSubmit={formik.handleSubmit} className="w-50">
-          <h1 className="text-center mb-4">Войти</h1>
-          <Form.Group className="form-floating mb-3">
-            <Form.Label htmlFor="username">Ваш ник</Form.Label>
-            <Form.Control
-              onChange={formik.handleChange}
-              value={formik.values.username}
-              placeholder="username"
-              name="username"
-              id="username"
-              autoComplete="username"
-              isInvalid={authError}
-              required
-              ref={inputRef}
-            />
-          </Form.Group>
-          <Form.Group className="form-floating mb-3">
-            <Form.Label htmlFor="password">Пароль</Form.Label>
-            <Form.Control
-              type="password"
-              onChange={formik.handleChange}
-              value={formik.values.password}
-              placeholder="password"
-              name="password"
-              id="password"
-              autoComplete="current-password"
-              isInvalid={authError}
-              required
-            />
-            <Form.Control.Feedback type="invalid">{authError}</Form.Control.Feedback>
-          </Form.Group>
-          <Button type="submit" className="w-100 mb-3 btn" variant="outline-primary">Войти</Button>
-        </Form>
+        <div className="col-xl-8 col-xxl-6">
+          <Card className="shadow-sm">
+            <Card.Body className="d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
+              <div>
+                <Card.Img src="../images/welcome.jpg" alt="Войти" />
+              </div>
+              <Form onSubmit={formik.handleSubmit} className="w-50">
+                <h1 className="text-center mb-4">Войти</h1>
+                <Form.Group className="form-floating mb-3 form-group">
+                  <Form.Control
+                    onChange={formik.handleChange}
+                    value={formik.values.username}
+                    placeholder="Ваш ник"
+                    name="username"
+                    id="username"
+                    autoComplete="username"
+                    isInvalid={authError}
+                    required
+                    ref={inputRef}
+                    disabled={isSending}
+                  />
+                  <Form.Label htmlFor="username">Ваш ник</Form.Label>
+                </Form.Group>
+                <Form.Group className="form-floating mb-3">
+                  <Form.Control
+                    type="password"
+                    onChange={formik.handleChange}
+                    value={formik.values.password}
+                    placeholder="Пароль"
+                    name="password"
+                    id="password"
+                    autoComplete="current-password"
+                    isInvalid={authError}
+                    required
+                    disabled={isSending}
+                  />
+                  <Form.Label htmlFor="password">Пароль</Form.Label>
+                  <Form.Control.Feedback type="invalid">{authError}</Form.Control.Feedback>
+                </Form.Group>
+                <Button type="submit" disabled={isSending} className="w-100 mb-3 btn" variant="outline-primary">Войти</Button>
+              </Form>
+            </Card.Body>
+            <Card.Footer className="p-4">
+              <div className="text-center">
+                <span>Нет аккаунта?</span>
+                <a href="/signup">Регистрация</a>
+              </div>
+            </Card.Footer>
+          </Card>
+        </div>
       </div>
     </div>
   );

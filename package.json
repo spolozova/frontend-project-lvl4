@@ -26,7 +26,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
     "axios": "*",
-    "bootstrap": "^4.6.0",
+    "bootstrap": "^5.0.1",
     "bootstrap-icons": "^1.5.0",
     "classnames": "^2.3.1",
     "core-js": "^3.12.1",
@@ -48,7 +48,7 @@
     "popper.js": "^1.16.1",
     "pug": "^3.0.2",
     "react": "*",
-    "react-bootstrap": "*",
+    "react-bootstrap": "^2.0.0-beta.0",
     "react-dom": "*",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
