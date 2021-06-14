@@ -2,8 +2,7 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
-import {
-  Button, Form, Card } from 'react-bootstrap';
+import { Button, Form, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
 import { useAuth } from '../hooks/index.jsx';
@@ -72,7 +71,7 @@ const LoginPage = () => {
           <Card className="shadow-sm">
             <Card.Body className="d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
               <div>
-                <Card.Img src="../images/welcome.jpg" alt="Войти" />
+                <Card.Img src="/src/images/welcome.png" alt="Войти" />
               </div>
               <Form onSubmit={formik.handleSubmit} className="w-50">
                 <h1 className="text-center mb-4">Войти</h1>

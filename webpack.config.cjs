@@ -25,7 +25,7 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin(),
   ],
-  devtool: "source-map",
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -34,13 +34,14 @@ module.exports = {
         use: 'babel-loader',
       },
       {
-        test: /\.s[ac]ss$/i,
+        test: [/\.s[ac]ss$/i, /\.(png|jpg)$/],
         use: [
           { loader: MiniCssExtractPlugin.loader },
           { loader: 'css-loader' },
           { loader: 'postcss-loader' },
           { loader: 'sass-loader' },
-          { loader: "source-map-loader"},
+          { loader: 'source-map-loader' },
+          { loader: 'url-loader?limit=8192' },
         ],
       },
     ],

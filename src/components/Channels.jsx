@@ -43,23 +43,26 @@ const Channels = () => {
   const renderChannelsList = (channel) => {
     const { id, name, removable } = channel;
     const variant = currentChannelId === id ? 'secondary' : 'light';
-    const channelButton = (
-      <Button
-        type="button"
-        variant={variant}
-        className="w-100 px-4 rounded-0 text-start"
-        onClick={() => dispatch(setCurrentChannel({ id }))}
-      >
-        <span className="me-3">#  </span>
-        {name}
-      </Button>
-    );
 
     if (removable) {
       return (
         <Nav.Item key={id} as="li">
           <Dropdown className="d-flex" as={ButtonGroup}>
-            {channelButton}
+            <Button
+              type="button"
+              variant={variant}
+              className="w-100 px-4 rounded-0 text-start"
+              onClick={() => dispatch(setCurrentChannel({ id }))}
+              style={{
+                textOverflow: 'ellipsis',
+                maxWidth: '185px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+              }}
+            >
+              <span className="me-3">#  </span>
+              {name}
+            </Button>
             <Dropdown.Toggle split variant={variant} className="flex-grow-0" id="dropdown-split-basic" />
             <Dropdown.Menu>
               <Dropdown.Item
@@ -81,7 +84,15 @@ const Channels = () => {
     }
     return (
       <Nav.Item key={id} as="li">
-        {channelButton}
+        <Button
+          type="button"
+          variant={variant}
+          className="w-100 px-4 rounded-0 text-start"
+          onClick={() => dispatch(setCurrentChannel({ id }))}
+        >
+          <span className="me-3">#  </span>
+          {name}
+        </Button>
       </Nav.Item>
     );
   };
