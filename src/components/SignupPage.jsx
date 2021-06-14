@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
 import { useAuth } from '../hooks/index.jsx';
 import routes from '../routes.js';
+import image from '../images/puzzle.png';
 
 const SignupPage = () => {
   const inputRef = useRef(null);
@@ -16,6 +17,7 @@ const SignupPage = () => {
     isAuthorized: true,
     authError: null,
   });
+  // @ts-ignore
   const { logIn } = useAuth();
   const history = useHistory();
 
@@ -81,8 +83,8 @@ const SignupPage = () => {
         <div className="col-xl-8 col-xxl-6">
           <Card className="shadow-sm">
             <Card.Body className="d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
-              <div>
-                <Card.Img src="../images/welcome.jpg" alt="Войти" />
+              <div style={{ maxWidth: 200 }}>
+                <Card.Img src={image} alt="Войти" />
               </div>
               <Form noValidate onSubmit={formik.handleSubmit} className="w-50">
                 <h1 className="text-center mb-4">Регистрация</h1>

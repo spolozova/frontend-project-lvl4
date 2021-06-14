@@ -34,14 +34,21 @@ module.exports = {
         use: 'babel-loader',
       },
       {
-        test: [/\.s[ac]ss$/i, /\.(png|jpg)$/],
+        test: /\.(png|jpg|gif)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+          },
+        ],
+      },
+      {
+        test: /\.s[ac]ss$/i,
         use: [
           { loader: MiniCssExtractPlugin.loader },
           { loader: 'css-loader' },
           { loader: 'postcss-loader' },
           { loader: 'sass-loader' },
           { loader: 'source-map-loader' },
-          { loader: 'url-loader?limit=8192' },
         ],
       },
     ],

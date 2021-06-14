@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
 import { useAuth } from '../hooks/index.jsx';
 import routes from '../routes.js';
+import image from '../images/people-talking.png';
 
 const validate = (values) => {
   const validationSchema = yup.object({
@@ -70,8 +71,8 @@ const LoginPage = () => {
         <div className="col-xl-8 col-xxl-6">
           <Card className="shadow-sm">
             <Card.Body className="d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
-              <div>
-                <Card.Img src="/src/images/welcome.png" alt="Войти" />
+              <div style={{ maxWidth: 200 }}>
+                <Card.Img src={image} alt="Войти" />
               </div>
               <Form onSubmit={formik.handleSubmit} className="w-50">
                 <h1 className="text-center mb-4">Войти</h1>
