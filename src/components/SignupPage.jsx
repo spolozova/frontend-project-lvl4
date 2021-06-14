@@ -104,7 +104,7 @@ const SignupPage = () => {
                   />
                   <Form.Label htmlFor="username">Имя пользователя</Form.Label>
 
-                  <Form.Control.Feedback type="invalid" tooltip>
+                  <Form.Control.Feedback type="invalid">
                     {formik.errors.username}
                   </Form.Control.Feedback>
                 </Form.Group>
@@ -125,7 +125,7 @@ const SignupPage = () => {
                   />
                   <Form.Label htmlFor="password">Пароль</Form.Label>
 
-                  <Form.Control.Feedback type="invalid" tooltip>
+                  <Form.Control.Feedback type="invalid">
                     {formik.errors.password}
                   </Form.Control.Feedback>
                 </Form.Group>
@@ -144,7 +144,7 @@ const SignupPage = () => {
                     required
                   />
                   <Form.Label htmlFor="confirmPassword">Подтвердите пароль</Form.Label>
-                  <Form.Control.Feedback type="invalid" tooltip>
+                  <Form.Control.Feedback type="invalid">
                     {authError || formik.errors.confirmPassword}
                   </Form.Control.Feedback>
                 </Form.Group>
