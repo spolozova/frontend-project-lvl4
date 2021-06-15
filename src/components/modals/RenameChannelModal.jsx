@@ -5,22 +5,9 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { closeModal } from '../../slices/modalSlicer.js';
 import { useSocket } from '../../hooks/index.jsx';
-
-const validate = (values, names) => {
-  const validationSchema = yup.object({
-    name: yup.string().trim().required().min(3)
-      .max(20)
-      .notOneOf(names),
-  });
-  try {
-    validationSchema.validateSync(values);
-    return null;
-  } catch (e) {
-    return e.message;
-  }
-};
 
 const RemoveChannelModal = () => {
   const { channelsInfo, modal } = useSelector((state) => state);
@@ -28,13 +15,30 @@ const RemoveChannelModal = () => {
   const socket = useSocket();
   const inputRef = useRef();
   const [sendingStatus, setSendingStatus] = useState({ isSending: false, errors: null });
+  const { t } = useTranslation();
 
   useEffect(() => {
     inputRef.current.focus();
     inputRef.current.select();
   }, []);
 
+  const validate = (values, names) => {
+    const validationSchema = yup.object({
+      name: yup.string().trim().required(t('validationErrors.required'))
+        .min(3, t('validationErrors.nameLengthError'))
+        .max(20, t('validationErrors.nameLengthError'))
+        .notOneOf(names),
+    });
+    try {
+      validationSchema.validateSync(values);
+      return null;
+    } catch (e) {
+      return e.message;
+    }
+  };
+
   const withTimeout = (onSuccess, onTimeout, timeout) => {
+    // eslint-disable-next-line functional/no-let
     let called = false;
 
     const timer = setTimeout(() => {
@@ -47,6 +51,7 @@ const RemoveChannelModal = () => {
       if (called) return;
       called = true;
       clearTimeout(timer);
+      // eslint-disable-next-line functional/no-this-expression
       onSuccess.apply(this);
     };
   };
@@ -70,7 +75,7 @@ const RemoveChannelModal = () => {
         setSendingStatus({ isSending: false, errors: null });
         dispatch(closeModal());
       }, () => {
-        setSendingStatus({ isSending: false, errors: 'ошибка сети' });
+        setSendingStatus({ isSending: false, errors: t('networkError') });
         inputRef.current.focus();
         inputRef.current.select();
       }, 1000));
@@ -83,7 +88,7 @@ const RemoveChannelModal = () => {
     <>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Добавить канал
+          {t('modals.addHeader')}
         </Modal.Title>
 
       </Modal.Header>
@@ -111,9 +116,9 @@ const RemoveChannelModal = () => {
                 disabled={isSending}
                 onClick={() => dispatch(closeModal())}
               >
-                Отменить
+                {t('buttons.cancel')}
               </Button>
-              <Button type="submit" disabled={isSending} variant="primary">Отправить</Button>
+              <Button type="submit" disabled={isSending} variant="primary">{t('buttons.send')}</Button>
             </div>
           </Form.Group>
         </Form>

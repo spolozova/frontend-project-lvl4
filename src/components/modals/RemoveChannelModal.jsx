@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { closeModal } from '../../slices/modalSlicer.js';
 import { useSocket } from '../../hooks/index.jsx';
 
@@ -11,8 +12,10 @@ const RemoveChannelModal = () => {
   const { extra } = useSelector((state) => state.modal);
   const socket = useSocket();
   const [isSending, setSendingStatus] = useState(false);
+  const { t } = useTranslation();
 
   const withTimeout = (onSuccess, onTimeout, timeout) => {
+    // eslint-disable-next-line functional/no-let
     let called = false;
 
     const timer = setTimeout(() => {
@@ -25,6 +28,7 @@ const RemoveChannelModal = () => {
       if (called) return;
       called = true;
       clearTimeout(timer);
+      // eslint-disable-next-line functional/no-this-expression
       onSuccess.apply(this);
     };
   };
@@ -43,11 +47,11 @@ const RemoveChannelModal = () => {
     <>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Удалить канал
+          {t('modals.removeHeader')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        Уверены?
+        {t('modals.areYouSure')}
       </Modal.Body>
       <Modal.Footer className="d-flex justify-content-between">
         <Button
@@ -57,7 +61,7 @@ const RemoveChannelModal = () => {
           onClick={() => dispatch(closeModal())}
           disabled={isSending}
         >
-          Отменить
+          {t('buttons.cancel')}
         </Button>
         <Button
           type="button"
@@ -65,7 +69,7 @@ const RemoveChannelModal = () => {
           disabled={isSending}
           onClick={handleRemove}
         >
-          Удалить
+          {t('buttons.delete')}
         </Button>
       </Modal.Footer>
     </>

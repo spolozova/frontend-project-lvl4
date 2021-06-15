@@ -1,19 +1,20 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   Redirect,
 } from 'react-router-dom';
-import { Button, Navbar } from 'react-bootstrap';
 import io from 'socket.io-client';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../locales/index.js';
 
 import ChatPage from './ChatPage.jsx';
 import LoginPage from './LoginPage.jsx';
 import NotFoundPage from './NotFoundPage.jsx';
 import ModalComponent from './modals/index.jsx';
 import SignupPage from './SignupPage.jsx';
+import NavBar from './NavBar.jsx';
 import { SocketContext, AuthContext } from '../contexts/index.jsx';
 import { useAuth } from '../hooks/index.jsx';
 
@@ -48,44 +49,32 @@ const ChatRoute = ({ children, path }) => {
   );
 };
 
-const AuthButton = () => {
-  const auth = useContext(AuthContext);
-  return (
-    auth.loggedIn
-      ? <Button onClick={auth.logOut}>Выйти</Button>
-      : null
-  );
-};
-
 const App = () => (
   <AuthProvider>
-    <SocketContext.Provider value={socket}>
-      <Router>
-        <div className="d-flex flex-column h-100">
-          <Navbar className="shadow-sm" variant="light" bg="white" expand="lg">
-            <div className="container">
-              <Navbar.Brand as={Link} className="d-flex align-items-center" to="/">Hexlet-Chat</Navbar.Brand>
-              <AuthButton />
-            </div>
-          </Navbar>
-          <Switch>
-            <Route path="/login">
-              <LoginPage />
-            </Route>
-            <Route path="/signup">
-              <SignupPage />
-            </Route>
-            <ChatRoute path="/">
-              <ChatPage />
-            </ChatRoute>
-            <Route path="*">
-              <NotFoundPage />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-      <ModalComponent />
-    </SocketContext.Provider>
+    <I18nextProvider i18n={i18n}>
+      <SocketContext.Provider value={socket}>
+        <Router>
+          <div className="d-flex flex-column h-100">
+            <NavBar />
+            <Switch>
+              <Route path="/login">
+                <LoginPage />
+              </Route>
+              <Route path="/signup">
+                <SignupPage />
+              </Route>
+              <ChatRoute exact path="/">
+                <ChatPage />
+              </ChatRoute>
+              <Route path="">
+                <NotFoundPage />
+              </Route>
+            </Switch>
+          </div>
+        </Router>
+        <ModalComponent />
+      </SocketContext.Provider>
+    </I18nextProvider>
   </AuthProvider>
 );
 

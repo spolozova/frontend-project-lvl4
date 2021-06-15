@@ -6,8 +6,10 @@ import { useFormik } from 'formik';
 import { Button, Form, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/index.jsx';
 import routes from '../routes.js';
+// @ts-ignore
 import image from '../images/puzzle.png';
 
 const SignupPage = () => {
@@ -20,6 +22,7 @@ const SignupPage = () => {
   // @ts-ignore
   const { logIn } = useAuth();
   const history = useHistory();
+  const { t } = useTranslation();
 
   useEffect(() => {
     inputRef.current.focus();
@@ -27,15 +30,15 @@ const SignupPage = () => {
 
   const signupSchema = yup.object({
     username: yup.string().trim()
-      .required()
-      .min(3)
-      .max(20),
+      .required(t('validationErrors.required'))
+      .min(3, t('validationErrors.nameLengthError'))
+      .max(20, t('validationErrors.nameLengthError')),
     password: yup.string().trim()
-      .required()
-      .min(6),
+      .required(t('validationErrors.required'))
+      .min(6, t('validationErrors.passwordLengthError')),
     confirmPassword: yup.string().trim()
-      .required()
-      .oneOf([yup.ref('password'), null]),
+      .required(t('validationErrors.required'))
+      .oneOf([yup.ref('password'), null], t('validationErrors.confirmPasswordError')),
   });
 
   const formik = useFormik({
@@ -63,14 +66,14 @@ const SignupPage = () => {
         history.push({ pathname: '/' });
       } catch (err) {
         if (err.isAxiosError && err.response.status === 409) {
-          setState({ isAuthorized: false, isSending: false, authError: 'Такой пользователь уже существует' });
+          setState({ isAuthorized: false, isSending: false, authError: t('forms.signupForm.authError') });
           inputRef.current.focus();
           return;
         }
         setState({
           isSending: false,
           isAuthorized: false,
-          authError: 'ошибка сети',
+          authError: t('networkError'),
         });
       }
     },
@@ -87,7 +90,7 @@ const SignupPage = () => {
                 <Card.Img src={image} alt="Войти" />
               </div>
               <Form noValidate onSubmit={formik.handleSubmit} className="w-50">
-                <h1 className="text-center mb-4">Регистрация</h1>
+                <h1 className="text-center mb-4">{t('forms.signupForm.header')}</h1>
                 <Form.Group className="form-floating mb-3 position-relative">
                   <Form.Control
                     onChange={formik.handleChange}
@@ -95,14 +98,14 @@ const SignupPage = () => {
                     value={formik.values.username}
                     name="username"
                     id="username"
-                    placeholder="Имя пользователя"
+                    placeholder={t('forms.signupForm.username')}
                     autoComplete="username"
                     isInvalid={formik.errors.username ? true : !isAuthorized}
                     ref={inputRef}
                     disabled={isSending}
                     required
                   />
-                  <Form.Label htmlFor="username">Имя пользователя</Form.Label>
+                  <Form.Label htmlFor="username">{t('forms.signupForm.username')}</Form.Label>
 
                   <Form.Control.Feedback type="invalid">
                     {formik.errors.username}
@@ -120,10 +123,10 @@ const SignupPage = () => {
                     autoComplete="current-password"
                     isInvalid={formik.errors.password ? true : !isAuthorized}
                     disabled={isSending}
-                    placeholder="Пароль"
+                    placeholder={t('forms.password')}
                     required
                   />
-                  <Form.Label htmlFor="password">Пароль</Form.Label>
+                  <Form.Label htmlFor="password">{t('forms.password')}</Form.Label>
 
                   <Form.Control.Feedback type="invalid">
                     {formik.errors.password}
@@ -140,15 +143,22 @@ const SignupPage = () => {
                     autoComplete="current-password"
                     isInvalid={formik.errors.confirmPassword ? true : !isAuthorized}
                     disabled={isSending}
-                    placeholder="Подтвердите пароль"
+                    placeholder={t('forms.signupForm.confirmPassword')}
                     required
                   />
-                  <Form.Label htmlFor="confirmPassword">Подтвердите пароль</Form.Label>
+                  <Form.Label htmlFor="confirmPassword">{t('forms.signupForm.confirmPassword')}</Form.Label>
                   <Form.Control.Feedback type="invalid">
                     {authError || formik.errors.confirmPassword}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Button type="submit" disabled={isSending} className="w-100 mb-3 btn" variant="outline-primary">Зарегистрироваться</Button>
+                <Button
+                  type="submit"
+                  disabled={isSending}
+                  className="w-100 mb-3 btn"
+                  variant="outline-primary"
+                >
+                  {t('forms.signupForm.signup')}
+                </Button>
               </Form>
             </Card.Body>
           </Card>

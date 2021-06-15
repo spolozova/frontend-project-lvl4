@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Row, Spinner } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import Messages from './Messages.jsx';
 import Channels from './Channels.jsx';
@@ -22,6 +23,7 @@ const ChatPage = () => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const dispatch = useDispatch();
   const socket = useSocket();
+  const { t } = useTranslation();
   useEffect(() => {
     setIsDataLoaded(false);
     const fetchContent = async () => {
@@ -53,7 +55,7 @@ const ChatPage = () => {
   return (
     <div className="d-flex justify-content-center">
       <Spinner animation="border" role="status">
-        <span className="visually-hidden">Loading...</span>
+        <span className="visually-hidden">{t('chatPage.loading')}</span>
       </Spinner>
     </div>
   );

@@ -1,11 +1,19 @@
+// @ts-check
 import React from 'react';
+import { Image } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import notFound from '../images/not-found.png';
 
-const NotFound = () => (
-  <div>
-    <h3>
-      Page was not found
-    </h3>
-  </div>
-);
+const NotFoundPage = () => {
+  const { t } = useTranslation();
+  return (
+    <div className="text-center">
+      <Image src={notFound} fluid style={{ maxWidth: 400 }} />
+      <p className="fs-1">
+        {t('notFoundPage')}
+      </p>
+    </div>
+  );
+};
 
-export default NotFound;
+export default NotFoundPage;

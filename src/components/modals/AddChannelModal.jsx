@@ -5,23 +5,10 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { setCurrentChannel } from '../../slices/channelsSlicer';
 import { closeModal } from '../../slices/modalSlicer.js';
 import { useSocket } from '../../hooks/index.jsx';
-
-const validate = (values, names) => {
-  const validationSchema = yup.object({
-    name: yup.string().trim().required().min(3)
-      .max(20)
-      .notOneOf(names),
-  });
-  try {
-    validationSchema.validateSync(values);
-    return null;
-  } catch (e) {
-    return e.message;
-  }
-};
 
 const AddChannelModal = () => {
   const { channelsInfo } = useSelector((state) => state);
@@ -29,12 +16,29 @@ const AddChannelModal = () => {
   const socket = useSocket();
   const inputRef = useRef();
   const [sendingStatus, setSendingStatus] = useState({ isSending: false, errors: null });
+  const { t } = useTranslation();
+
+  const validate = (values, names) => {
+    const validationSchema = yup.object({
+      name: yup.string().trim().required(t('validationErrors.required'))
+        .min(3, t('validationErrors.nameLengthError'))
+        .max(20, t('validationErrors.nameLengthError'))
+        .notOneOf(names, t('validationErrors.uniqueError')),
+    });
+    try {
+      validationSchema.validateSync(values);
+      return null;
+    } catch (e) {
+      return e.message;
+    }
+  };
 
   useEffect(() => {
     inputRef.current.focus();
   }, []);
 
   const withTimeout = (onSuccess, onTimeout, timeout) => {
+    // eslint-disable-next-line functional/no-let
     let called = false;
 
     const timer = setTimeout(() => {
@@ -47,6 +51,7 @@ const AddChannelModal = () => {
       if (called) return;
       called = true;
       clearTimeout(timer);
+      // eslint-disable-next-line functional/no-this-expression
       onSuccess.apply(this, args);
     };
   };
@@ -69,7 +74,7 @@ const AddChannelModal = () => {
         dispatch(setCurrentChannel({ id: data.id }));
         dispatch(closeModal());
       }, () => {
-        setSendingStatus({ isSending: false, errors: 'ошибка сети' });
+        setSendingStatus({ isSending: false, errors: t('networkError') });
         inputRef.current.focus();
       }, 1000));
     },
@@ -81,7 +86,7 @@ const AddChannelModal = () => {
     <>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Добавить канал
+          {t('modals.addHeader')}
         </Modal.Title>
 
       </Modal.Header>
@@ -102,8 +107,22 @@ const AddChannelModal = () => {
             />
             <Form.Control.Feedback type="invalid">{errors}</Form.Control.Feedback>
             <div className="d-flex justify-content-end">
-              <Button type="button" className="me-2" variant="secondary" disabled={isSending} onClick={() => dispatch(closeModal())}>Отменить</Button>
-              <Button type="submit" disabled={isSending} variant="primary">Отправить</Button>
+              <Button
+                type="button"
+                className="me-2"
+                variant="secondary"
+                disabled={isSending}
+                onClick={() => dispatch(closeModal())}
+              >
+                {t('buttons.cancel')}
+              </Button>
+              <Button
+                type="submit"
+                disabled={isSending}
+                variant="primary"
+              >
+                {t('buttons.send')}
+              </Button>
             </div>
           </Form.Group>
         </Form>

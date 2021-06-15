@@ -8,23 +8,20 @@ import {
   FormControl,
 } from 'react-bootstrap';
 import _ from 'lodash';
+import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSocket } from '../hooks/index.jsx';
 import { addMessage } from '../slices/messagesSlicer.js';
 
-const getMessagesList = (messages, currentId) => {
-  if (messages.length === 0) {
-    return null;
-  }
-  return messages.filter(({ channelId }) => channelId === currentId)
-    .map(({ username, body, id }) => (
-      <div key={id} className="text-break mb-2">
-        <b>{username}</b>
-        :
-        {body}
-      </div>
-    ));
-};
+const getMessagesList = (messages, currentId) => messages
+  .filter(({ channelId }) => channelId === currentId)
+  .map(({ username, body, id }) => (
+    <div key={id} className="text-break mb-2">
+      <b>{username}</b>
+      :
+      {body}
+    </div>
+  ));
 
 const Messages = () => {
   // @ts-ignore
@@ -37,6 +34,7 @@ const Messages = () => {
   const dispatch = useDispatch();
   const socket = useSocket();
   const [isSending, setIsSending] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     messageInputRef.current.focus();
@@ -52,6 +50,7 @@ const Messages = () => {
   }, [messages]);
 
   const withTimeout = (onSuccess, onTimeout, timeout) => {
+    // eslint-disable-next-line functional/no-let
     let called = false;
 
     const timer = setTimeout(() => {
@@ -64,6 +63,7 @@ const Messages = () => {
       if (called) return;
       called = true;
       clearTimeout(timer);
+      // eslint-disable-next-line functional/no-this-expression
       onSuccess.apply(this);
     };
   };
@@ -90,6 +90,8 @@ const Messages = () => {
       }, 1000));
     },
   });
+
+  const currentMessagesList = getMessagesList(messages, currentChannelId);
   return (
     <Col className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
@@ -100,10 +102,12 @@ const Messages = () => {
               {currentChannel && currentChannel.name}
             </b>
           </p>
-          <span className="text-muted">сообщения</span>
+          <span className="text-muted">
+            {currentMessagesList && t('chatPage.messagesCounter', { count: currentMessagesList.length })}
+          </span>
         </div>
         <div id="message-box" className="chat-messages overflow-auto px-5" ref={messagesListRef}>
-          {getMessagesList(messages, currentChannelId)}
+          {currentMessagesList}
         </div>
         <div className="border-top mt-auto py-3 px-5">
           <Form onSubmit={formik.handleSubmit}>
@@ -113,7 +117,7 @@ const Messages = () => {
                 ref={messageInputRef}
                 name="body"
                 data-testid="new-message"
-                placeholder="Введите сообщение..."
+                placeholder={t('chatPage.messageField')}
                 className="border-0"
                 value={formik.values.body}
                 onChange={formik.handleChange}

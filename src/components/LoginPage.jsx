@@ -5,8 +5,10 @@ import { useFormik } from 'formik';
 import { Button, Form, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/index.jsx';
 import routes from '../routes.js';
+// @ts-ignore
 import image from '../images/people-talking.png';
 
 const validate = (values) => {
@@ -18,13 +20,14 @@ const validate = (values) => {
     validationSchema.validateSync(values);
     return null;
   } catch (e) {
-    return e.message;
+    return e;
   }
 };
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   // @ts-ignore
-  const { logIn, logOut } = useAuth();
+  const { logIn } = useAuth();
   const [authError, setAuthState] = useState(null);
   const [isSending, setIsSending] = useState(false);
   const history = useHistory();
@@ -44,7 +47,7 @@ const LoginPage = () => {
       setIsSending(true);
       const error = validate(values);
       if (error) {
-        setAuthState('Неверные имя пользователя или пароль');
+        setAuthState(t('forms.loginForm.authError'));
         setIsSending(false);
         return;
       }
@@ -55,12 +58,11 @@ const LoginPage = () => {
         history.push({ pathname: '/' });
       } catch (err) {
         if (err.isAxiosError && err.response.status === 401) {
-          setAuthState('Неверные имя пользователя или пароль');
-          logOut();
+          setAuthState(t('forms.loginForm.authError'));
           inputRef.current.focus();
         }
         setIsSending(false);
-        throw err;
+        console.log(err);
       }
     },
   });
@@ -74,8 +76,8 @@ const LoginPage = () => {
               <div style={{ maxWidth: 200 }}>
                 <Card.Img src={image} alt="Войти" />
               </div>
-              <Form onSubmit={formik.handleSubmit} className="w-50">
-                <h1 className="text-center mb-4">Войти</h1>
+              <Form noValidate onSubmit={formik.handleSubmit} className="w-50">
+                <h1 className="text-center mb-4">{t('forms.loginForm.header')}</h1>
                 <Form.Group className="form-floating mb-3 form-group">
                   <Form.Control
                     onChange={formik.handleChange}
@@ -89,7 +91,7 @@ const LoginPage = () => {
                     ref={inputRef}
                     disabled={isSending}
                   />
-                  <Form.Label htmlFor="username">Ваш ник</Form.Label>
+                  <Form.Label htmlFor="username">{t('forms.loginForm.username')}</Form.Label>
                 </Form.Group>
                 <Form.Group className="form-floating mb-3">
                   <Form.Control
@@ -104,16 +106,23 @@ const LoginPage = () => {
                     required
                     disabled={isSending}
                   />
-                  <Form.Label htmlFor="password">Пароль</Form.Label>
+                  <Form.Label htmlFor="password">{t('forms.password')}</Form.Label>
                   <Form.Control.Feedback type="invalid">{authError}</Form.Control.Feedback>
                 </Form.Group>
-                <Button type="submit" disabled={isSending} className="w-100 mb-3 btn" variant="outline-primary">Войти</Button>
+                <Button
+                  type="submit"
+                  disabled={isSending}
+                  className="w-100 mb-3 btn"
+                  variant="outline-primary"
+                >
+                  {t('forms.loginForm.header')}
+                </Button>
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                <span>Нет аккаунта?</span>
-                <a href="/signup">Регистрация</a>
+                <span>{t('forms.loginForm.noAccount')}</span>
+                <a href="/signup">{t('forms.loginForm.signup')}</a>
               </div>
             </Card.Footer>
           </Card>
