@@ -3,7 +3,7 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
-
+import '../assets/application.scss';
 import store from './store.js';
 import App from './components/App.jsx';
 
@@ -16,3 +16,4 @@ const init = () => {
   );
 };
 
+export default init;
