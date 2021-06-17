@@ -4,38 +4,23 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { closeModal } from '../../slices/modalSlicer.js';
 import { useSocket } from '../../hooks/index.jsx';
+import { validate } from '../../validation/validationScheme.js';
 
 const RemoveChannelModal = () => {
   const { channelsInfo, modal } = useSelector((state) => state);
   const dispatch = useDispatch();
   const socket = useSocket();
   const inputRef = useRef();
-  const [sendingStatus, setSendingStatus] = useState({ isSending: false, errors: null });
+  const [sendingStatus, setSendingStatus] = useState({ isSending: false, error: null });
   const { t } = useTranslation();
 
   useEffect(() => {
     inputRef.current.focus();
     inputRef.current.select();
   }, []);
-
-  const validate = (values, names) => {
-    const validationSchema = yup.object({
-      name: yup.string().trim().required(t('validationErrors.required'))
-        .min(3, t('validationErrors.nameLengthError'))
-        .max(20, t('validationErrors.nameLengthError'))
-        .notOneOf(names),
-    });
-    try {
-      validationSchema.validateSync(values);
-      return null;
-    } catch (e) {
-      return e.message;
-    }
-  };
 
   const withTimeout = (onSuccess, onTimeout, timeout) => {
     // eslint-disable-next-line functional/no-let
@@ -61,28 +46,28 @@ const RemoveChannelModal = () => {
       name: '',
     },
     onSubmit: (values) => {
-      setSendingStatus({ isSending: true, errors: null });
+      setSendingStatus({ isSending: true, error: null });
       const channelsNames = channelsInfo.channels.map((c) => c.name);
-      const error = validate(values, channelsNames);
-      if (error) {
-        setSendingStatus({ isSending: false, errors: error });
+      const validError = validate('updateChannel', values, channelsNames);
+      if (validError) {
+        setSendingStatus({ isSending: false, error: t(`validationErrors.${validError}`) });
         inputRef.current.focus();
         inputRef.current.select();
         return;
       }
       const data = { name: values.name, id: modal.extra.channelId };
       socket.volatile.emit('renameChannel', data, withTimeout(() => {
-        setSendingStatus({ isSending: false, errors: null });
+        setSendingStatus({ isSending: false, error: null });
         dispatch(closeModal());
       }, () => {
-        setSendingStatus({ isSending: false, errors: t('networkError') });
+        setSendingStatus({ isSending: false, error: t('authErrors.unspecific') });
         inputRef.current.focus();
         inputRef.current.select();
       }, 1000));
     },
   });
 
-  const { isSending, errors } = sendingStatus;
+  const { isSending, error } = sendingStatus;
 
   return (
     <>
@@ -103,11 +88,11 @@ const RemoveChannelModal = () => {
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              isInvalid={errors}
+              isInvalid={error}
               required
               disabled={isSending}
             />
-            <Form.Control.Feedback type="invalid">{errors}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
             <div className="d-flex justify-content-end">
               <Button
                 type="button"

@@ -4,32 +4,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { Button, Form, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/index.jsx';
 import routes from '../routes.js';
+import { validate } from '../validation/validationScheme.js';
 // @ts-ignore
 import image from '../images/people-talking.png';
-
-const validate = (values) => {
-  const validationSchema = yup.object({
-    username: yup.string().required(),
-    password: yup.string().required(),
-  });
-  try {
-    validationSchema.validateSync(values);
-    return null;
-  } catch (e) {
-    return e;
-  }
-};
 
 const LoginPage = () => {
   const { t } = useTranslation();
   // @ts-ignore
   const { logIn } = useAuth();
-  const [authError, setAuthState] = useState(null);
-  const [isSending, setIsSending] = useState(false);
+  const [authState, setAuthState] = useState({ isSending: false, authError: null });
   const history = useHistory();
   const inputRef = useRef(null);
 
@@ -43,12 +29,10 @@ const LoginPage = () => {
       password: '',
     },
     onSubmit: async (values) => {
-      setAuthState(null);
-      setIsSending(true);
-      const error = validate(values);
-      if (error) {
-        setAuthState(t('forms.loginForm.authError'));
-        setIsSending(false);
+      setAuthState({ isSending: true, authError: null });
+      const validError = validate('login', values);
+      if (validError) {
+        setAuthState({ isSending: false, authError: t(`validationErrors.${validError}`) });
         return;
       }
       try {
@@ -57,15 +41,16 @@ const LoginPage = () => {
         logIn();
         history.push({ pathname: '/' });
       } catch (err) {
-        if (err.isAxiosError && err.response.status === 401) {
-          setAuthState(t('forms.loginForm.authError'));
-          inputRef.current.focus();
-        }
-        setIsSending(false);
-        console.log(err);
+        setAuthState({
+          isSending: false,
+          authError: t([`authErrors.${err.response.status}`, 'authErrors.unspecific']),
+        });
+        inputRef.current.focus();
       }
     },
   });
+
+  const { isSending, authError } = authState;
 
   return (
     <div className="container-fluid flex-grow-1">

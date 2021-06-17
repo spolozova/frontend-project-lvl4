@@ -2,6 +2,7 @@
 import React from 'react';
 import { Image } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+// @ts-ignore
 import notFound from '../images/not-found.png';
 
 const NotFoundPage = () => {

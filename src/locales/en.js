@@ -9,7 +9,6 @@ export default {
       loginForm: {
         header: 'Log in',
         username: 'Nickname',
-        authError: 'Invalid username or password',
         noAccount: 'Don`t have an account?',
         signup: 'Sign up',
       },
@@ -18,15 +17,19 @@ export default {
         confirmPassword: 'Confirm the password',
         signup: 'Sign up',
         username: 'Username',
-        authError: 'User already exists',
       },
     },
+    authErrors: {
+      401: 'Invalid username or password.',
+      409: 'User already exists',
+      unspecific: 'Something went wrong. Repeat attempt later.',
+    },
     validationErrors: {
-      lengthError: 'From 3 to 20 characters',
+      nameLength: 'From 3 to 20 characters',
       required: 'Required field',
-      passwordError: 'Not less than 6 characters',
-      confirmPasswordError: 'Passwords must match',
-      uniqueError: 'The name must be unique',
+      passwordLength: 'Not less than 6 characters',
+      confirmPassword: 'Passwords must match',
+      unique: 'The name must be unique',
     },
     networkError: 'Network error. Check the connection and try again',
     buttons: {

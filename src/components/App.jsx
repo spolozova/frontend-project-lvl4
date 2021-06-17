@@ -22,12 +22,11 @@ const socket = io({ autoConnect: false });
 
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
-
   const logIn = () => setLoggedIn(true);
   const logOut = () => {
     localStorage.removeItem('userId');
-    setLoggedIn(false);
     socket.disconnect();
+    setLoggedIn(false);
   };
   return (
     <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
@@ -37,12 +36,11 @@ const AuthProvider = ({ children }) => {
 };
 
 const ChatRoute = ({ children, path }) => {
-  const auth = useAuth();
-
+  const { loggedIn } = useAuth();
   return (
     <Route
       path={path}
-      render={() => (auth.loggedIn
+      render={() => (loggedIn
         ? children
         : <Redirect to="/login" />)}
     />

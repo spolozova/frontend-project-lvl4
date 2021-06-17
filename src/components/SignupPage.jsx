@@ -5,10 +5,11 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import { Button, Form, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/index.jsx';
 import routes from '../routes.js';
+import { getSchema } from '../validation/validationScheme.js';
+
 // @ts-ignore
 import image from '../images/puzzle.png';
 
@@ -28,26 +29,14 @@ const SignupPage = () => {
     inputRef.current.focus();
   }, []);
 
-  const signupSchema = yup.object({
-    username: yup.string().trim()
-      .required(t('validationErrors.required'))
-      .min(3, t('validationErrors.nameLengthError'))
-      .max(20, t('validationErrors.nameLengthError')),
-    password: yup.string().trim()
-      .required(t('validationErrors.required'))
-      .min(6, t('validationErrors.passwordLengthError')),
-    confirmPassword: yup.string().trim()
-      .required(t('validationErrors.required'))
-      .oneOf([yup.ref('password'), null], t('validationErrors.confirmPasswordError')),
-  });
-
   const formik = useFormik({
-    validationSchema: signupSchema,
+    validationSchema: getSchema('signup'),
     initialValues: {
       username: '',
       password: '',
       confirmPassword: '',
     },
+    validateOnBlur: true,
     onSubmit: async (values) => {
       setState({
         isSending: true,
@@ -65,21 +54,23 @@ const SignupPage = () => {
         });
         history.push({ pathname: '/' });
       } catch (err) {
-        if (err.isAxiosError && err.response.status === 409) {
-          setState({ isAuthorized: false, isSending: false, authError: t('forms.signupForm.authError') });
-          inputRef.current.focus();
-          return;
-        }
         setState({
           isSending: false,
           isAuthorized: false,
-          authError: t('networkError'),
+          authError: t([`authErrors.${err.response.status}`, 'authErrors.unspecific']),
         });
+        inputRef.current.focus();
       }
     },
   });
   const { isSending, isAuthorized, authError } = signupState;
-
+  const {
+    handleSubmit,
+    values,
+    handleBlur,
+    errors,
+    handleChange,
+  } = formik;
   return (
     <div className="container-fluid flex-grow-1">
       <div className="row justify-content-center align-content-center h-100">
@@ -89,18 +80,18 @@ const SignupPage = () => {
               <div style={{ maxWidth: 200 }}>
                 <Card.Img src={image} alt="Войти" />
               </div>
-              <Form noValidate onSubmit={formik.handleSubmit} className="w-50">
+              <Form noValidate onSubmit={handleSubmit} className="w-50">
                 <h1 className="text-center mb-4">{t('forms.signupForm.header')}</h1>
                 <Form.Group className="form-floating mb-3 position-relative">
                   <Form.Control
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.username}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.username}
                     name="username"
                     id="username"
                     placeholder={t('forms.signupForm.username')}
                     autoComplete="username"
-                    isInvalid={formik.errors.username ? true : !isAuthorized}
+                    isInvalid={errors.username ? true : !isAuthorized}
                     ref={inputRef}
                     disabled={isSending}
                     required
@@ -108,20 +99,20 @@ const SignupPage = () => {
                   <Form.Label htmlFor="username">{t('forms.signupForm.username')}</Form.Label>
 
                   <Form.Control.Feedback type="invalid">
-                    {formik.errors.username}
+                    {t(`validationErrors.${errors.username}`)}
                   </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group className="form-floating mb-3 position-relative">
                   <Form.Control
                     type="password"
-                    onChange={formik.handleChange}
-                    value={formik.values.password}
-                    onBlur={formik.handleBlur}
+                    onChange={handleChange}
+                    value={values.password}
+                    onBlur={handleBlur}
                     name="password"
                     id="password"
                     autoComplete="current-password"
-                    isInvalid={formik.errors.password ? true : !isAuthorized}
+                    isInvalid={errors.password ? true : !isAuthorized}
                     disabled={isSending}
                     placeholder={t('forms.password')}
                     required
@@ -129,26 +120,26 @@ const SignupPage = () => {
                   <Form.Label htmlFor="password">{t('forms.password')}</Form.Label>
 
                   <Form.Control.Feedback type="invalid">
-                    {formik.errors.password}
+                    {t(`validationErrors.${errors.password}`)}
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="form-floating mb-3 position-relative">
                   <Form.Control
                     type="password"
-                    onChange={formik.handleChange}
-                    value={formik.values.confirmPassword}
-                    onBlur={formik.handleBlur}
+                    onChange={handleChange}
+                    value={values.confirmPassword}
+                    onBlur={handleBlur}
                     name="confirmPassword"
                     id="confirmPassword"
                     autoComplete="current-password"
-                    isInvalid={formik.errors.confirmPassword ? true : !isAuthorized}
+                    isInvalid={errors.confirmPassword ? true : !isAuthorized}
                     disabled={isSending}
                     placeholder={t('forms.signupForm.confirmPassword')}
                     required
                   />
                   <Form.Label htmlFor="confirmPassword">{t('forms.signupForm.confirmPassword')}</Form.Label>
                   <Form.Control.Feedback type="invalid">
-                    {authError || formik.errors.confirmPassword}
+                    {authError || t(`validationErrors.${errors.confirmPassword}`)}
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Button

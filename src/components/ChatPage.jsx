@@ -9,7 +9,7 @@ import Messages from './Messages.jsx';
 import Channels from './Channels.jsx';
 import { fetchChannels } from '../slices/channelsSlicer.js';
 import routes from '../routes';
-import { useSocket } from '../hooks/index.jsx';
+import { useSocket, useAuth } from '../hooks/index.jsx';
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
