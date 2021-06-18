@@ -7,6 +7,10 @@ import '../assets/application.scss';
 import store from './store.js';
 import App from './components/App.jsx';
 
+if (process.env.NODE_ENV !== 'production') {
+  localStorage.debug = 'chat:*';
+}
+
 const init = () => {
   ReactDOM.render(
     <Provider store={store}>
