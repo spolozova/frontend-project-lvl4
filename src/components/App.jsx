@@ -18,64 +18,62 @@ import NavBar from './NavBar.jsx';
 import { SocketContext, AuthContext } from '../contexts/index.jsx';
 import { useAuth } from '../hooks/index.jsx';
 
-const App = () => {
-  const socket = io({ autoConnect: false });
+const socket = io({ autoConnect: false });
 
-  const AuthProvider = ({ children }) => {
-    const [loggedIn, setLoggedIn] = useState(false);
-    const logIn = () => setLoggedIn(true);
-    const logOut = () => {
-      localStorage.removeItem('userId');
-      socket.disconnect();
-      setLoggedIn(false);
-    };
-    return (
-      <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
-        {children}
-      </AuthContext.Provider>
-    );
+const AuthProvider = ({ children }) => {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const logIn = () => setLoggedIn(true);
+  const logOut = () => {
+    localStorage.removeItem('userId');
+    socket.disconnect();
+    setLoggedIn(false);
   };
-
-  const ChatRoute = ({ children, path }) => {
-    const { loggedIn } = useAuth();
-    return (
-      <Route
-        path={path}
-        render={() => (loggedIn
-          ? children
-          : <Redirect to="/login" />)}
-      />
-    );
-  };
-
   return (
-    <AuthProvider>
-      <I18nextProvider i18n={i18n}>
-        <SocketContext.Provider value={socket}>
-          <Router>
-            <div className="d-flex flex-column h-100">
-              <NavBar />
-              <Switch>
-                <Route path="/login">
-                  <LoginPage />
-                </Route>
-                <Route path="/signup">
-                  <SignupPage />
-                </Route>
-                <ChatRoute exact path="/">
-                  <ChatPage />
-                </ChatRoute>
-                <Route path="">
-                  <NotFoundPage />
-                </Route>
-              </Switch>
-            </div>
-          </Router>
-          <ModalComponent />
-        </SocketContext.Provider>
-      </I18nextProvider>
-    </AuthProvider>
+    <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
+
+const ChatRoute = ({ children, path }) => {
+  const { loggedIn } = useAuth();
+  return (
+    <Route
+      path={path}
+      render={() => (loggedIn
+        ? children
+        : <Redirect to="/login" />)}
+    />
+  );
+};
+
+const App = () => (
+  <AuthProvider>
+    <I18nextProvider i18n={i18n}>
+      <SocketContext.Provider value={socket}>
+        <Router>
+          <div className="d-flex flex-column h-100">
+            <NavBar />
+            <Switch>
+              <Route path="/login">
+                <LoginPage />
+              </Route>
+              <Route path="/signup">
+                <SignupPage />
+              </Route>
+              <ChatRoute exact path="/">
+                <ChatPage />
+              </ChatRoute>
+              <Route path="">
+                <NotFoundPage />
+              </Route>
+            </Switch>
+          </div>
+        </Router>
+        <ModalComponent />
+      </SocketContext.Provider>
+    </I18nextProvider>
+  </AuthProvider>
+);
 
 export default App;
