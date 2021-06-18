@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSocket } from '../hooks/index.jsx';
 import { addMessage } from '../slices/messagesSlicer.js';
+import withTimeout from '../utils.js';
 
 const getMessagesList = (messages, currentId) => messages
   .filter(({ channelId }) => channelId === currentId)
@@ -48,25 +49,6 @@ const Messages = () => {
     const scroll = messagesListRef.current.scrollHeight - messagesListRef.current.clientHeight;
     messagesListRef.current.scrollTo(0, scroll);
   }, [messages]);
-
-  const withTimeout = (onSuccess, onTimeout, timeout) => {
-    // eslint-disable-next-line functional/no-let
-    let called = false;
-
-    const timer = setTimeout(() => {
-      if (called) return;
-      called = true;
-      onTimeout();
-    }, timeout);
-
-    return () => {
-      if (called) return;
-      called = true;
-      clearTimeout(timer);
-      // eslint-disable-next-line functional/no-this-expression
-      onSuccess.apply(this);
-    };
-  };
 
   const formik = useFormik({
     initialValues: {

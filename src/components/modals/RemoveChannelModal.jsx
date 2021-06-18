@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { closeModal } from '../../slices/modalSlicer.js';
 import { useSocket } from '../../hooks/index.jsx';
+import withTimeout from '../../utils.js';
 
 const RemoveChannelModal = () => {
   const dispatch = useDispatch();
@@ -13,25 +14,6 @@ const RemoveChannelModal = () => {
   const socket = useSocket();
   const [isSending, setSendingStatus] = useState(false);
   const { t } = useTranslation();
-
-  const withTimeout = (onSuccess, onTimeout, timeout) => {
-    // eslint-disable-next-line functional/no-let
-    let called = false;
-
-    const timer = setTimeout(() => {
-      if (called) return;
-      called = true;
-      onTimeout();
-    }, timeout);
-
-    return () => {
-      if (called) return;
-      called = true;
-      clearTimeout(timer);
-      // eslint-disable-next-line functional/no-this-expression
-      onSuccess.apply(this);
-    };
-  };
 
   const handleRemove = () => {
     setSendingStatus(true);
