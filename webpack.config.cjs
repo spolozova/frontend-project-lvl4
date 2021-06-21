@@ -12,7 +12,7 @@ module.exports = {
     extensions: ['.js', '.jsx'],
   },
   entry: [
-    `${__dirname}/src/index.js`,
+    `${__dirname}/src/init.js`,
   ],
   output: {
     path: path.join(__dirname, 'dist', 'public'),

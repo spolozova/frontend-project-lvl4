@@ -1,6 +1,6 @@
 // @ts-check
 import Rollbar from 'rollbar';
-import init from './init.jsx';
+import init from './index.jsx';
 
 // не используется проверка на NODE_ENV т.к. Rollbar access token существует только в production
 const rollbar = new Rollbar({

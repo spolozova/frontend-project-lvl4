@@ -11,12 +11,14 @@ if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
 }
 
+const container = document.getElementById('chat');
 const init = () => {
+  console.log(container);
   ReactDOM.render(
     <Provider store={store}>
       <App />
     </Provider>,
-    document.getElementById('chat'),
+    container,
   );
 };
 
