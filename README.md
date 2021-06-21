@@ -5,7 +5,7 @@
 
 ### Simple chat-application. 
 #### It's possible to chat in existing channels or to add and delete your unique channels.
-## [Live DEMO](https://vast-fjord-01848.herokuapp.com/)
+## [Live DEMO](https://sveta-chat.herokuapp.com/)
 
 ### Usage
 1. Install
