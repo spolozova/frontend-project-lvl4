@@ -1,7 +1,6 @@
 // @ts-check
 
 import ReactDOM from 'react-dom';
-import Rollbar from 'rollbar';
 import React from 'react';
 import { Provider } from 'react-redux';
 import '../assets/application.scss';
