@@ -12,7 +12,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const init = () => {
-  console.log(App);
   ReactDOM.render(
     <Provider store={store}>
       <App />
