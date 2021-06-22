@@ -7,8 +7,13 @@ import { initReactI18next } from 'react-i18next';
 import resources from './locales/index.js';
 import store from './store.js';
 import App from './components/App.jsx';
+import '../assets/application.scss';
 
-const init = async () => {
+if (process.env.NODE_ENV !== 'production') {
+  localStorage.debug = 'chat:*';
+}
+
+export default async () => {
   const i18next = i18n.createInstance();
   await i18next
     .use(initReactI18next)
@@ -28,5 +33,3 @@ const init = async () => {
     </Provider>
   );
 };
-
-export default init;
