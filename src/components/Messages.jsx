@@ -56,7 +56,7 @@ const Messages = () => {
     initialValues: {
       body: '',
     },
-    onSubmit: ({ body }) => {
+    onSubmit: async ({ body }) => {
       setIsSending(true);
       const { username } = JSON.parse(localStorage.getItem('userId'));
       const outgoingMessage = {
@@ -64,7 +64,7 @@ const Messages = () => {
         channelId: currentChannelId,
         username,
       };
-      socket.volatile.emit('newMessage', outgoingMessage, withTimeout(() => {
+      await socket.volatile.emit('newMessage', outgoingMessage, withTimeout(() => {
         setIsSending(false);
         formik.resetForm();
         messageInputRef.current.focus();
