@@ -52,7 +52,7 @@ const SignupPage = () => {
           isAuthorized: true,
           authError: null,
         });
-        history.push({ pathname: '/' });
+        history.replace({ pathname: '/' });
       } catch (err) {
         setState({
           isSending: false,

@@ -39,7 +39,7 @@ const LoginPage = () => {
         const resp = await axios.post(routes.loginPath(), values);
         localStorage.setItem('userId', JSON.stringify(resp.data));
         logIn();
-        history.push({ pathname: '/' });
+        history.replace({ pathname: '/' });
       } catch (err) {
         setAuthState({
           isSending: false,
@@ -107,7 +107,7 @@ const LoginPage = () => {
             <Card.Footer className="p-4">
               <div className="text-center">
                 <span>{t('forms.loginForm.noAccount')}</span>
-                <a href="/signup">{t('forms.loginForm.signup')}</a>
+                <a href="/signup" onClick={() => history.replace({ pathname: '/signup' })}>{t('forms.loginForm.signup')}</a>
               </div>
             </Card.Footer>
           </Card>

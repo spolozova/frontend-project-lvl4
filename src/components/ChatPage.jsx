@@ -28,7 +28,8 @@ const ChatPage = () => {
     setIsDataLoaded(false);
     const fetchContent = async () => {
       const url = routes.dataPath();
-      const { data } = await axios.get(url, { headers: getAuthHeader() });
+      const token = getAuthHeader();
+      const { data } = await axios.get(url, { headers: token });
       dispatch(fetchChannels(data));
       setIsDataLoaded(true);
     };

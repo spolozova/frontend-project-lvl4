@@ -19,7 +19,7 @@ import { useAuth } from '../hooks/index.jsx';
 const socket = io({ autoConnect: false });
 
 const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(!!localStorage.userId);
   const logIn = () => setLoggedIn(true);
   const logOut = () => {
     localStorage.removeItem('userId');
@@ -34,7 +34,7 @@ const AuthProvider = ({ children }) => {
 };
 
 const ChatRoute = ({ children, path }) => {
-  const { loggedIn } = useAuth();
+  const { loggedIn } = useAuth(AuthContext);
   return (
     <Route
       path={path}
