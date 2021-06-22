@@ -21,6 +21,7 @@ const init = async () => {
       },
       saveMissing: true,
     });
+
   return (
     <Provider store={store}>
       <App />
