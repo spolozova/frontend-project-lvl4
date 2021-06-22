@@ -46,6 +46,7 @@ const Messages = () => {
   }, [dispatch, socket]);
 
   useEffect(() => {
+    console.log(messages);
     const scroll = messagesListRef.current.scrollHeight - messagesListRef.current.clientHeight;
     messagesListRef.current.scrollTo(0, scroll);
   }, [messages]);
