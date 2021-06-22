@@ -64,7 +64,7 @@ const Messages = () => {
         channelId: currentChannelId,
         username,
       };
-      await socket.volatile.emit('newMessage', outgoingMessage, withTimeout(() => {
+      socket.volatile.emit('newMessage', outgoingMessage, await withTimeout(() => {
         setIsSending(false);
         formik.resetForm();
         messageInputRef.current.focus();
