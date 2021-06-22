@@ -53,7 +53,7 @@ export default {
     },
     navBar: {
       logout: 'Log out',
-      chatName: 'Hexlet-Chat',
+      chatName: 'Hexlet Chat',
     },
     notFoundPage: 'Page not found. Click "Hexlet-Chat" to go to the main page.',
   },
