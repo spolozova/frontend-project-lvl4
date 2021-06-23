@@ -19,7 +19,7 @@ const getMessagesList = (messages, currentId) => messages
   .map(({ username, body, id }) => (
     <div key={id} className="text-break mb-2">
       <b>{username}</b>
-      :
+      {': '}
       {body}
     </div>
   ));
@@ -56,7 +56,7 @@ const Messages = () => {
     initialValues: {
       body: '',
     },
-    onSubmit: async ({ body }) => {
+    onSubmit: ({ body }) => {
       setIsSending(true);
       const { username } = JSON.parse(localStorage.getItem('userId'));
       const outgoingMessage = {
@@ -64,7 +64,7 @@ const Messages = () => {
         channelId: currentChannelId,
         username,
       };
-      socket.volatile.emit('newMessage', outgoingMessage, await withTimeout(() => {
+      socket.volatile.emit('newMessage', outgoingMessage, withTimeout(() => {
         setIsSending(false);
         formik.resetForm();
         messageInputRef.current.focus();

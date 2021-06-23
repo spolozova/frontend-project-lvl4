@@ -13,7 +13,7 @@ export default {
         signup: 'Sign up',
       },
       signupForm: {
-        signupHeader: 'Sign up',
+        header: 'Sign up',
         confirmPassword: 'Confirm the password',
         signup: 'Sign up',
         username: 'Username',

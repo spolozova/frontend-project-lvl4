@@ -9,6 +9,9 @@ rollbar.configure({
   accessToken: '3304fc7414d24faabb91eb38a1e718da',
   captureUncaught: true,
   captureUnhandledRejections: true,
+  payload: {
+    environment: 'production',
+  },
 });
 
 const render = async () => {

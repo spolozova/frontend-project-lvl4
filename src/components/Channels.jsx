@@ -53,7 +53,7 @@ const Channels = () => {
             <Button
               type="button"
               variant={variant}
-              className="w-100 px-4 rounded-0 text-start"
+              className="w-100 rounded-0 text-start text-truncate"
               onClick={() => dispatch(setCurrentChannel({ id }))}
               style={{
                 textOverflow: 'ellipsis',
@@ -62,7 +62,7 @@ const Channels = () => {
                 overflow: 'hidden',
               }}
             >
-              <span className="me-3">#  </span>
+              <span className="me-1">#</span>
               {name}
             </Button>
             <Dropdown.Toggle split variant={variant} className="flex-grow-0" id="dropdown-split-basic" />
@@ -89,10 +89,10 @@ const Channels = () => {
         <Button
           type="button"
           variant={variant}
-          className="w-100 px-4 rounded-0 text-start"
+          className="w-100 rounded-0 text-start"
           onClick={() => dispatch(setCurrentChannel({ id }))}
         >
-          <span className="me-3">#  </span>
+          <span className="me-1">#</span>
           {name}
         </Button>
       </Nav.Item>
