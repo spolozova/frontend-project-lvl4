@@ -38,24 +38,24 @@ const Messages = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    messageInputRef.current.focus();
-    socket.on('newMessage', (newMessage) => {
-      dispatch(addMessage(newMessage));
-    });
-    return () => socket.off('newMessage');
-  }, [dispatch, socket]);
-
-  useEffect(() => {
     if (!isSending && messages.length !== 0) {
       const scroll = messagesListRef.current.scrollHeight - messagesListRef.current.clientHeight;
       messagesListRef.current.scrollTo(0, scroll);
     }
   }, [isSending, messages]);
 
+  useEffect(() => {
+    messageInputRef.current.focus();
+    socket.on('newMessage', (newMessage) => {
+      dispatch(addMessage(newMessage));
+    });
+    return () => socket.off('newMessage');
+  }, [dispatch, socket]);
   const formik = useFormik({
     initialValues: {
       body: '',
     },
+
     onSubmit: ({ body }) => {
       setIsSending(true);
       const { username } = JSON.parse(localStorage.getItem('userId'));

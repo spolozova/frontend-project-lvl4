@@ -66,7 +66,7 @@ const RemoveChannelModal = () => {
               ref={inputRef}
               className="mb-2"
               name="name"
-              data-testid="add-channel"
+              data-testid="rename-channel"
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
