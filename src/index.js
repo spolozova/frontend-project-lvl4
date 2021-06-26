@@ -16,7 +16,8 @@ rollbar.configure({
 });
 
 const render = async () => {
-  const dom = await init(io);
+  const socketClient = io();
+  const dom = await init(socketClient);
 
   ReactDOM.render(dom, document.getElementById('chat'));
 };
