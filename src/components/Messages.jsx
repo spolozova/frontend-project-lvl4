@@ -51,6 +51,7 @@ const Messages = () => {
     });
     return () => socket.off('newMessage');
   }, [dispatch, socket]);
+
   const formik = useFormik({
     initialValues: {
       body: '',

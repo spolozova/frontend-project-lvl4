@@ -106,7 +106,7 @@ const LoginPage = () => {
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                <span>{t('forms.loginForm.noAccount')}</span>
+                <span className="me-1">{t('forms.loginForm.noAccount')}</span>
                 <a href="/signup" onClick={() => history.replace({ pathname: '/signup' })}>{t('forms.loginForm.signup')}</a>
               </div>
             </Card.Footer>

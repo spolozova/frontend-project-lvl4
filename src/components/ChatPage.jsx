@@ -22,16 +22,25 @@ const ChatPage = () => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const dispatch = useDispatch();
   const { t } = useTranslation();
+
   useEffect(() => {
-    setIsDataLoaded(false);
+    let cleanupFunction = false;
     const fetchContent = async () => {
-      const url = routes.dataPath();
-      const token = getAuthHeader();
-      const { data } = await axios.get(url, { headers: token });
-      dispatch(fetchChannels(data));
-      setIsDataLoaded(true);
+      try {
+        const url = routes.dataPath();
+        const token = getAuthHeader();
+        const { data } = await axios.get(url, { headers: token });
+        dispatch(fetchChannels(data));
+        if (!cleanupFunction) setIsDataLoaded(true);
+      } catch (e) {
+        console.error(e.message);
+      }
     };
     fetchContent();
+    return () => {
+      cleanupFunction = true;
+      return cleanupFunction;
+    };
   }, [dispatch]);
 
   if (isDataLoaded) {
