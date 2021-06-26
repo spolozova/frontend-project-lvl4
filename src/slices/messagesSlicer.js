@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 // @ts-check
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchChannels, removeChannel } from './channelsSlicer.js';
