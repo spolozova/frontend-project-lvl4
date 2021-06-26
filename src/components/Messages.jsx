@@ -39,9 +39,9 @@ const Messages = () => {
 
   useEffect(() => {
     if (!isSending && messages.length !== 0) {
-      const scroll = messagesListRef.current.scrollHeight - messagesListRef.current.clientHeight;
+      // const scroll = messagesListRef.current.scrollHeight - messagesListRef.current.clientHeight;
       console.log(messagesListRef.current);
-      messagesListRef.current.scrollTo(0, scroll);
+      messagesListRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [isSending, messages]);
 
