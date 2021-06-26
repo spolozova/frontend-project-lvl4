@@ -100,8 +100,8 @@ const Channels = () => {
   };
 
   return (
-    <Col className="col-2 px-0 pt-5 border-end bg-light overflow-hidden">
-      <div className="d-flex justify-content-between mb-2 px-4">
+    <Col className="col-4 col-md-2 border-end pt-5 px-0 bg-light">
+      <div className="d-flex justify-content-between mb-2 ps-4 px-4">
         <span>{t('chatPage.channels')}</span>
         <button type="button" className="p-0 text-primary btn btn-group-vertical" onClick={() => dispatch(openModal({ type: 'addChannel' }))}>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" className="bi bi-plus-square" viewBox="0 0 16 16">
@@ -109,6 +109,7 @@ const Channels = () => {
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
           </svg>
         </button>
+        <span className="visually-hidden">+</span>
       </div>
       <Nav className="flex-column nav-pills nav-fill" as="ul">
         {channels.map(renderChannelsList)}
