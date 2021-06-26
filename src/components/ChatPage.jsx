@@ -24,6 +24,7 @@ const ChatPage = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
+    // eslint-disable-next-line functional/no-let
     let cleanupFunction = false;
     const fetchContent = async () => {
       try {
@@ -39,7 +40,6 @@ const ChatPage = () => {
     fetchContent();
     return () => {
       cleanupFunction = true;
-      return cleanupFunction;
     };
   }, [dispatch]);
 
