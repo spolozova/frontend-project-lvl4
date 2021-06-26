@@ -13,7 +13,7 @@ if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
 }
 
-export default async () => {
+export default async (socketClient) => {
   const i18next = i18n.createInstance();
   await i18next
     .use(initReactI18next)
@@ -27,9 +27,11 @@ export default async () => {
       saveMissing: true,
     });
 
+  const socket = socketClient();
+
   return (
     <Provider store={store}>
-      <App />
+      <App socket={socket} />
     </Provider>
   );
 };

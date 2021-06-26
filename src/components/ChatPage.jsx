@@ -9,7 +9,6 @@ import Messages from './Messages.jsx';
 import Channels from './Channels.jsx';
 import { fetchChannels } from '../slices/channelsSlicer.js';
 import routes from '../routes';
-import { useSocket } from '../hooks/index.jsx';
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
@@ -22,7 +21,6 @@ const getAuthHeader = () => {
 const ChatPage = () => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const dispatch = useDispatch();
-  const socket = useSocket();
   const { t } = useTranslation();
   useEffect(() => {
     setIsDataLoaded(false);
@@ -35,13 +33,6 @@ const ChatPage = () => {
     };
     fetchContent();
   }, [dispatch]);
-
-  useEffect(() => {
-    socket.connect();
-    return () => {
-      socket.disconnect();
-    };
-  }, [socket]);
 
   if (isDataLoaded) {
     return (

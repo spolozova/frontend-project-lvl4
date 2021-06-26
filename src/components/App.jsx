@@ -5,7 +5,6 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import io from 'socket.io-client';
 
 import ChatPage from './ChatPage.jsx';
 import LoginPage from './LoginPage.jsx';
@@ -16,14 +15,11 @@ import NavBar from './NavBar.jsx';
 import { SocketContext, AuthContext } from '../contexts/index.jsx';
 import { useAuth } from '../hooks/index.jsx';
 
-const socket = io({ autoConnect: false });
-
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(!!localStorage.userId);
   const logIn = () => setLoggedIn(true);
   const logOut = () => {
     localStorage.removeItem('userId');
-    socket.disconnect();
     setLoggedIn(false);
   };
   return (
@@ -45,7 +41,7 @@ const ChatRoute = ({ children, path }) => {
   );
 };
 
-const App = () => (
+const App = ({ socket }) => (
   <AuthProvider>
     <SocketContext.Provider value={socket}>
       <Router>
