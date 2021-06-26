@@ -37,13 +37,13 @@ const Messages = () => {
   const [isSending, setIsSending] = useState(false);
   const { t } = useTranslation();
 
-  useEffect(() => {
-    if (!isSending && messages.length !== 0) {
-      // const scroll = messagesListRef.current.scrollHeight - messagesListRef.current.clientHeight;
-      console.log(messagesListRef.current);
-      messagesListRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [isSending, messages]);
+  // useEffect(() => {
+  //   if (!isSending && messages.length !== 0) {
+  //     const scroll = messagesListRef.current.scrollHeight - messagesListRef.current.clientHeight;
+  //     console.log(messagesListRef.current);
+  //     messagesListRef.current.scrollIntoView({ behavior: 'smooth' });
+  //   }
+  // }, [isSending, messages]);
 
   useEffect(() => {
     messageInputRef.current.focus();
