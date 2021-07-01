@@ -10,7 +10,7 @@ import {
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { useSocket } from '../hooks/index.jsx';
+import { useSocket } from '../hooks';
 import { addMessage } from '../slices/messagesSlicer.js';
 import withTimeout from '../utils.js';
 
@@ -37,13 +37,12 @@ const Messages = () => {
   const [isSending, setIsSending] = useState(false);
   const { t } = useTranslation();
 
-  // useEffect(() => {
-  //   if (!isSending && messages.length !== 0) {
-  //     const scroll = messagesListRef.current.scrollHeight - messagesListRef.current.clientHeight;
-  //     console.log(messagesListRef.current);
-  //     messagesListRef.current.scrollIntoView({ behavior: 'smooth' });
-  //   }
-  // }, [isSending, messages]);
+  useEffect(() => {
+    if (!isSending && messages.length !== 0) {
+      const scroll = messagesListRef.current.scrollHeight - messagesListRef.current.clientHeight;
+      messagesListRef.current?.scrollTo?.(0, scroll);
+    }
+  }, [isSending, messages]);
 
   useEffect(() => {
     messageInputRef.current.focus();

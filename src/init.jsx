@@ -27,11 +27,9 @@ export default async (socketClient) => {
       saveMissing: true,
     });
 
-  const socket = socketClient;
-
   return (
     <Provider store={store}>
-      <App socket={socket} />
+      <App socket={socketClient} />
     </Provider>
   );
 };

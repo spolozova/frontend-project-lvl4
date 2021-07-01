@@ -1,37 +1,44 @@
----
-
-root: true
+parser: babel-eslint
 
 plugins:
-  - functional
   - react
+  - jest
+  - functional
+  - testing-library
+  - jest-dom
 
 extends:
   - airbnb
+  - "plugin:jest/recommended"
   - "plugin:functional/external-recommended"
   - "plugin:functional/recommended"
-  - 'plugin:react-hooks/recommended'
-
-parser: babel-eslint
-
-parserOptions:
-  ecmaFeatures:
-    jsx: true
-  ecmaVersion: 12
-  sourceType: module
+  - "plugin:react/recommended"
+  - "plugin:react-hooks/recommended"
+  - "plugin:testing-library/react"
+  - "plugin:jest-dom/recommended"
 
 env:
   browser: true
-  es2021: true
   node: true
+  jest: true
+  # es2020: true
 
-settings:
-  import/resolver:
-    - node
-    - webpack
+# parserOptions:
+#   ecmaVersion: 2020
+
+# settings:
+#   import/resolver:
+#     webpack:
+#     node:
+#     # webpack:
+# #   react:
+# #     version: "16.13"
 
 rules:
   import/extensions: 0
+  # TODO: cause an error
+  import/no-unresolved: 0
+  # react/jsx-filename-extension: 0
   react/prop-types: 0
   no-console: 0
   functional/no-conditional-statement: 0
@@ -40,3 +47,5 @@ rules:
   functional/functional-parameters: 0
   functional/no-try-statement: 0
   functional/no-throw-statement: 0
+  no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]
+  testing-library/no-debug: 0
