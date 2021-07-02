@@ -5,7 +5,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { closeModal } from '../../slices/modalSlicer.js';
-import { useSocket } from '../../hooks/index.jsx';
+import { useSocket } from '../../hooks';
 import withTimeout from '../../utils.js';
 
 const RemoveChannelModal = () => {

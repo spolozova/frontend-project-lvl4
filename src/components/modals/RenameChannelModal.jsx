@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { closeModal } from '../../slices/modalSlicer.js';
-import { useSocket } from '../../hooks/index.jsx';
+import { useSocket } from '../../hooks';
 import { validate } from '../../validation/validationScheme.js';
 import withTimeout from '../../utils.js';
 

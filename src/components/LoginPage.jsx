@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import { Button, Form, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../hooks/index.jsx';
+import { useAuth } from '../hooks';
 import routes from '../routes.js';
 import { validate } from '../validation/validationScheme.js';
 // @ts-ignore

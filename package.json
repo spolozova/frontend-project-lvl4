@@ -50,6 +50,7 @@
     "pug": "^3.0.2",
     "react": "*",
     "react-bootstrap": "^2.0.0-beta.0",
+    "react-bootstrap-icons": "^1.5.0",
     "react-dom": "*",
     "react-i18next": "^11.11.0",
     "react-redux": "^7.2.4",

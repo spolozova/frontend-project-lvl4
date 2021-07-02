@@ -7,7 +7,7 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { setCurrentChannel } from '../../slices/channelsSlicer';
 import { closeModal } from '../../slices/modalSlicer.js';
-import { useSocket } from '../../hooks/index.jsx';
+import { useSocket } from '../../hooks';
 import { validate } from '../../validation/validationScheme.js';
 
 const AddChannelModal = () => {
