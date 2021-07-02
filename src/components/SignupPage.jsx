@@ -78,7 +78,7 @@ const SignupPage = () => {
           <Card className="shadow-sm">
             <Card.Body className="d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
               <div style={{ maxWidth: 200 }}>
-                <Card.Img src={image} alt="Войти" />
+                <Card.Img src={image} alt="Зарегистрироваться" />
               </div>
               <Form noValidate onSubmit={handleSubmit} className="w-50">
                 <h1 className="text-center mb-4">{t('forms.signupForm.header')}</h1>
