@@ -11,10 +11,8 @@ import {
 import { ArrowRightSquare } from 'react-bootstrap-icons';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useSocket } from '../hooks';
-import { addMessage } from '../slices/messagesSlicer.js';
-import withTimeout from '../utils.js';
 
 const getMessagesList = (messages, currentId) => messages
   .filter(({ channelId }) => channelId === currentId)
@@ -34,8 +32,7 @@ const Messages = () => {
   const currentChannel = channels.length === 0 ? null : _.find(channels, ['id', currentChannelId]);
   const messageInputRef = useRef(null);
   const messagesListRef = useRef(null);
-  const dispatch = useDispatch();
-  const socket = useSocket();
+  const { sendNewMessage } = useSocket();
   const [isSending, setIsSending] = useState(false);
   const { t } = useTranslation();
 
@@ -48,11 +45,7 @@ const Messages = () => {
 
   useEffect(() => {
     messageInputRef.current.focus();
-    socket.on('newMessage', (newMessage) => {
-      dispatch(addMessage(newMessage));
-    });
-    return () => socket.off('newMessage');
-  }, [dispatch, socket]);
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -67,14 +60,18 @@ const Messages = () => {
         channelId: currentChannelId,
         username,
       };
-      socket.volatile.emit('newMessage', outgoingMessage, withTimeout(() => {
+
+      const onSuccess = () => {
         setIsSending(false);
         formik.resetForm();
         messageInputRef.current.focus();
-      }, () => {
+      };
+
+      const onTimeout = () => {
         setIsSending(false);
         messageInputRef.current.focus();
-      }, 1000));
+      };
+      sendNewMessage(outgoingMessage, onSuccess, onTimeout);
     },
   });
 

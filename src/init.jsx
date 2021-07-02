@@ -5,7 +5,11 @@ import { Provider } from 'react-redux';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import resources from './locales/index.js';
+import getSocketApi from './socketApi.js';
 import store from './store.js';
+import { SocketContext } from './contexts/index.jsx';
+import { addMessage } from './slices/messagesSlicer.js';
+import { addChannel, removeChannel, renameChannel } from './slices/channelsSlicer.js';
 import App from './components/App.jsx';
 import '../assets/application.scss';
 
@@ -27,9 +31,27 @@ export default async (socketClient) => {
       saveMissing: true,
     });
 
+  socketClient.on('newMessage', (newMessage) => {
+    store.dispatch(addMessage(newMessage));
+  });
+
+  socketClient.on('newChannel', (channel) => {
+    store.dispatch(addChannel({ channel }));
+  });
+  socketClient.on('removeChannel', ({ id }) => {
+    store.dispatch(removeChannel({ id }));
+  });
+  socketClient.on('renameChannel', (channel) => {
+    store.dispatch(renameChannel(channel));
+  });
+
+  const socket = getSocketApi(socketClient);
+
   return (
     <Provider store={store}>
-      <App socket={socketClient} />
+      <SocketContext.Provider value={socket}>
+        <App />
+      </SocketContext.Provider>
     </Provider>
   );
 };

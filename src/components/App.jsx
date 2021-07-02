@@ -12,7 +12,7 @@ import NotFoundPage from './NotFoundPage.jsx';
 import ModalComponent from './modals/index.jsx';
 import SignupPage from './SignupPage.jsx';
 import NavBar from './NavBar.jsx';
-import { SocketContext, AuthContext } from '../contexts/index.jsx';
+import { AuthContext } from '../contexts/index.jsx';
 import { useAuth } from '../hooks/index.jsx';
 
 const AuthProvider = ({ children }) => {
@@ -41,30 +41,28 @@ const ChatRoute = ({ children, path }) => {
   );
 };
 
-const App = ({ socket }) => (
+const App = () => (
   <AuthProvider>
-    <SocketContext.Provider value={socket}>
-      <Router>
-        <div className="d-flex flex-column h-100">
-          <NavBar />
-          <Switch>
-            <Route path="/login">
-              <LoginPage />
-            </Route>
-            <Route path="/signup">
-              <SignupPage />
-            </Route>
-            <ChatRoute exact path="/">
-              <ChatPage />
-            </ChatRoute>
-            <Route path="">
-              <NotFoundPage />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-      <ModalComponent />
-    </SocketContext.Provider>
+    <Router>
+      <div className="d-flex flex-column h-100">
+        <NavBar />
+        <Switch>
+          <Route path="/login">
+            <LoginPage />
+          </Route>
+          <Route path="/signup">
+            <SignupPage />
+          </Route>
+          <ChatRoute exact path="/">
+            <ChatPage />
+          </ChatRoute>
+          <Route path="">
+            <NotFoundPage />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
+    <ModalComponent />
   </AuthProvider>
 );
 

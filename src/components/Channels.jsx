@@ -1,5 +1,5 @@
 // @ts-check
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Col,
   Nav,
@@ -10,38 +10,14 @@ import {
 import { PlusSquare } from 'react-bootstrap-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import {
-  setCurrentChannel,
-  addChannel,
-  removeChannel,
-  renameChannel,
-} from '../slices/channelsSlicer.js';
+import { setCurrentChannel } from '../slices/channelsSlicer.js';
 import { openModal } from '../slices/modalSlicer.js';
-import { useSocket } from '../hooks';
 
 const Channels = () => {
   // @ts-ignore
   const { channels, currentChannelId } = useSelector((state) => state.channelsInfo);
   const dispatch = useDispatch();
-  const socket = useSocket();
   const { t } = useTranslation();
-
-  useEffect(() => {
-    socket.on('newChannel', (channel) => {
-      dispatch(addChannel({ channel }));
-    });
-    socket.on('removeChannel', ({ id }) => {
-      dispatch(removeChannel({ id }));
-    });
-    socket.on('renameChannel', (channel) => {
-      dispatch(renameChannel(channel));
-    });
-    return () => {
-      socket.off('newChannel');
-      socket.off('removeChannel');
-      socket.off('renameChannel');
-    };
-  }, [dispatch, socket]);
 
   const renderChannelsList = (channel) => {
     const { id, name, removable } = channel;
@@ -76,7 +52,7 @@ const Channels = () => {
               </Dropdown.Item>
               <Dropdown.Item
                 href="#"
-                onClick={() => dispatch(openModal({ type: 'renameChannel', channelId: id }))}
+                onClick={() => dispatch(openModal({ type: 'renameChannel', channelId: id, name }))}
               >
                 {t('buttons.rename')}
               </Dropdown.Item>

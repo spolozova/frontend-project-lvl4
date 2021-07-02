@@ -13,33 +13,14 @@ import { validate } from '../../validation/validationScheme.js';
 const AddChannelModal = () => {
   const { channelsInfo } = useSelector((state) => state);
   const dispatch = useDispatch();
-  const socket = useSocket();
-  const inputRef = useRef();
+  const { addChannel } = useSocket();
+  const addChannelRef = useRef();
   const [sendingStatus, setSendingStatus] = useState({ isSending: false, error: null });
   const { t } = useTranslation();
 
   useEffect(() => {
-    inputRef.current.focus();
+    addChannelRef.current.focus();
   }, []);
-
-  const withTimeout = (onSuccess, onTimeout, timeout) => {
-    // eslint-disable-next-line functional/no-let
-    let called = false;
-
-    const timer = setTimeout(() => {
-      if (called) return;
-      called = true;
-      onTimeout();
-    }, timeout);
-
-    return (...args) => {
-      if (called) return;
-      called = true;
-      clearTimeout(timer);
-      // eslint-disable-next-line functional/no-this-expression
-      onSuccess.apply(this, args);
-    };
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -51,17 +32,22 @@ const AddChannelModal = () => {
       const validError = validate('updateChannel', values, channelsNames);
       if (validError) {
         setSendingStatus({ isSending: false, error: t(`validationErrors.${validError}`) });
-        inputRef.current.focus();
+        addChannelRef.current.focus();
         return;
       }
-      socket.volatile.emit('newChannel', values, withTimeout(({ data }) => {
+
+      const onSuccess = ({ data }) => {
         setSendingStatus({ isSending: false, error: null });
         dispatch(setCurrentChannel({ id: data.id }));
         dispatch(closeModal());
-      }, () => {
+      };
+
+      const onTimeout = () => {
         setSendingStatus({ isSending: false, error: t('authErrors.unspecific') });
-        inputRef.current.focus();
-      }, 1000));
+        addChannelRef.current.focus();
+      };
+
+      addChannel(values, onSuccess, onTimeout);
     },
   });
 
@@ -79,7 +65,7 @@ const AddChannelModal = () => {
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group>
             <Form.Control
-              ref={inputRef}
+              ref={addChannelRef}
               className="mb-2"
               name="name"
               data-testid="add-channel"

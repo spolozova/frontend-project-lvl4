@@ -8,16 +8,14 @@ import { useTranslation } from 'react-i18next';
 import { closeModal } from '../../slices/modalSlicer.js';
 import { useSocket } from '../../hooks';
 import { validate } from '../../validation/validationScheme.js';
-import withTimeout from '../../utils.js';
 
 const RemoveChannelModal = () => {
   const { channelsInfo, modal } = useSelector((state) => state);
   const dispatch = useDispatch();
-  const socket = useSocket();
+  const { renameChannel } = useSocket();
   const inputRef = useRef();
   const [sendingStatus, setSendingStatus] = useState({ isSending: false, error: null });
   const { t } = useTranslation();
-
   useEffect(() => {
     inputRef.current.focus();
     inputRef.current.select();
@@ -25,7 +23,7 @@ const RemoveChannelModal = () => {
 
   const formik = useFormik({
     initialValues: {
-      name: '',
+      name: modal.extra.name,
     },
     onSubmit: (values) => {
       setSendingStatus({ isSending: true, error: null });
@@ -38,14 +36,18 @@ const RemoveChannelModal = () => {
         return;
       }
       const data = { name: values.name, id: modal.extra.channelId };
-      socket.volatile.emit('renameChannel', data, withTimeout(() => {
+      const onSuccess = () => {
         setSendingStatus({ isSending: false, error: null });
         dispatch(closeModal());
-      }, () => {
+      };
+
+      const onTimeout = () => {
         setSendingStatus({ isSending: false, error: t('authErrors.unspecific') });
         inputRef.current.focus();
         inputRef.current.select();
-      }, 1000));
+      };
+
+      renameChannel(data, onSuccess, onTimeout);
     },
   });
 

@@ -6,23 +6,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { closeModal } from '../../slices/modalSlicer.js';
 import { useSocket } from '../../hooks';
-import withTimeout from '../../utils.js';
 
 const RemoveChannelModal = () => {
   const dispatch = useDispatch();
   const { extra } = useSelector((state) => state.modal);
-  const socket = useSocket();
+  const { removeChannel } = useSocket();
   const [isSending, setSendingStatus] = useState(false);
   const { t } = useTranslation();
 
+  const onSuccess = () => {
+    setSendingStatus(false);
+    dispatch(closeModal());
+  };
+
+  const onTimeout = () => setSendingStatus(false);
+
   const handleRemove = () => {
     setSendingStatus(true);
-    socket.volatile.emit('removeChannel', { id: extra.channelId }, withTimeout(() => {
-      setSendingStatus(false);
-      dispatch(closeModal());
-    }, () => {
-      setSendingStatus(false);
-    }, 1000));
+    removeChannel({ id: extra.channelId }, onSuccess, onTimeout);
   };
 
   return (
