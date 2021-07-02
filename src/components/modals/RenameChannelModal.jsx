@@ -57,7 +57,7 @@ const RemoveChannelModal = () => {
     <>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          {t('modals.addHeader')}
+          {t('modals.renameHeader')}
         </Modal.Title>
 
       </Modal.Header>
