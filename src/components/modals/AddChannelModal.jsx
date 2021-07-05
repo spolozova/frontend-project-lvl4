@@ -15,7 +15,7 @@ const AddChannelModal = () => {
   const dispatch = useDispatch();
   const { addChannel } = useSocket();
   const addChannelRef = useRef();
-  const [sendingStatus, setSendingStatus] = useState({ isSending: false, error: null });
+  const [error, setError] = useState(null);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -26,32 +26,30 @@ const AddChannelModal = () => {
     initialValues: {
       name: '',
     },
-    onSubmit: (values) => {
-      setSendingStatus({ isSending: true, error: null });
+    onSubmit: async (values) => {
+      setError(null);
       const channelsNames = channelsInfo.channels.map((c) => c.name);
       const validError = validate('updateChannel', values, channelsNames);
       if (validError) {
-        setSendingStatus({ isSending: false, error: t(`validationErrors.${validError}`) });
+        setError(t(`validationErrors.${validError}`));
         addChannelRef.current.focus();
         return;
       }
 
       const onSuccess = ({ data }) => {
-        setSendingStatus({ isSending: false, error: null });
+        setError(null);
         dispatch(setCurrentChannel({ id: data.id }));
         dispatch(closeModal());
       };
 
       const onTimeout = () => {
-        setSendingStatus({ isSending: false, error: t('authErrors.unspecific') });
+        setError(t('authErrors.unspecific'));
         addChannelRef.current.focus();
       };
 
-      addChannel(values, onSuccess, onTimeout);
+      await addChannel(values, onSuccess, onTimeout);
     },
   });
-
-  const { isSending, error } = sendingStatus;
 
   return (
     <>
@@ -74,7 +72,7 @@ const AddChannelModal = () => {
               onBlur={formik.handleBlur}
               isInvalid={error}
               required
-              disabled={isSending}
+              disabled={formik.isSubmitting}
             />
             <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
             <div className="d-flex justify-content-end">
@@ -82,14 +80,14 @@ const AddChannelModal = () => {
                 type="button"
                 className="me-2"
                 variant="secondary"
-                disabled={isSending}
+                disabled={formik.isSubmitting}
                 onClick={() => dispatch(closeModal())}
               >
                 {t('buttons.cancel')}
               </Button>
               <Button
                 type="submit"
-                disabled={isSending}
+                disabled={formik.isSubmitting}
                 variant="primary"
               >
                 {t('buttons.send')}

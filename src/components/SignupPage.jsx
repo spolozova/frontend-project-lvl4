@@ -16,7 +16,6 @@ import image from '../images/puzzle.png';
 const SignupPage = () => {
   const inputRef = useRef(null);
   const [signupState, setState] = useState({
-    isSending: false,
     isAuthorized: true,
     authError: null,
   });
@@ -39,7 +38,6 @@ const SignupPage = () => {
     validateOnBlur: true,
     onSubmit: async (values) => {
       setState({
-        isSending: true,
         isAuthorized: true,
         authError: null,
       });
@@ -48,14 +46,12 @@ const SignupPage = () => {
         localStorage.setItem('userId', JSON.stringify(resp.data));
         logIn();
         setState({
-          isSending: false,
           isAuthorized: true,
           authError: null,
         });
         history.replace({ pathname: '/' });
       } catch (err) {
         setState({
-          isSending: false,
           isAuthorized: false,
           authError: t([`authErrors.${err.response.status}`, 'authErrors.unspecific']),
         });
@@ -63,7 +59,7 @@ const SignupPage = () => {
       }
     },
   });
-  const { isSending, isAuthorized, authError } = signupState;
+  const { isAuthorized, authError } = signupState;
   const {
     handleSubmit,
     values,
@@ -93,7 +89,7 @@ const SignupPage = () => {
                     autoComplete="username"
                     isInvalid={errors.username ? true : !isAuthorized}
                     ref={inputRef}
-                    disabled={isSending}
+                    disabled={formik.isSubmitting}
                     required
                   />
                   <Form.Label htmlFor="username">{t('forms.signupForm.username')}</Form.Label>
@@ -113,7 +109,7 @@ const SignupPage = () => {
                     id="password"
                     autoComplete="current-password"
                     isInvalid={errors.password ? true : !isAuthorized}
-                    disabled={isSending}
+                    disabled={formik.isSubmitting}
                     placeholder={t('forms.password')}
                     required
                   />
@@ -133,7 +129,7 @@ const SignupPage = () => {
                     id="confirmPassword"
                     autoComplete="current-password"
                     isInvalid={errors.confirmPassword ? true : !isAuthorized}
-                    disabled={isSending}
+                    disabled={formik.isSubmitting}
                     placeholder={t('forms.signupForm.confirmPassword')}
                     required
                   />
@@ -144,7 +140,7 @@ const SignupPage = () => {
                 </Form.Group>
                 <Button
                   type="submit"
-                  disabled={isSending}
+                  disabled={formik.isSubmitting}
                   className="w-100 mb-3 btn"
                   variant="outline-primary"
                 >

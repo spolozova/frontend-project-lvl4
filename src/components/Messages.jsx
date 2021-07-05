@@ -1,5 +1,5 @@
 // @ts-check
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import {
   Form,
@@ -33,15 +33,14 @@ const Messages = () => {
   const messageInputRef = useRef(null);
   const messagesListRef = useRef(null);
   const { sendNewMessage } = useSocket();
-  const [isSending, setIsSending] = useState(false);
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!isSending && messages.length !== 0) {
+    if (messages.length !== 0) {
       const scroll = messagesListRef.current.scrollHeight - messagesListRef.current.clientHeight;
       messagesListRef.current?.scrollTo?.(0, scroll);
     }
-  }, [isSending, messages]);
+  }, [messages]);
 
   useEffect(() => {
     messageInputRef.current.focus();
@@ -53,7 +52,6 @@ const Messages = () => {
     },
 
     onSubmit: ({ body }) => {
-      setIsSending(true);
       const { username } = JSON.parse(localStorage.getItem('userId'));
       const outgoingMessage = {
         body,
@@ -62,13 +60,11 @@ const Messages = () => {
       };
 
       const onSuccess = () => {
-        setIsSending(false);
         formik.resetForm();
         messageInputRef.current.focus();
       };
 
       const onTimeout = () => {
-        setIsSending(false);
         messageInputRef.current.focus();
       };
       sendNewMessage(outgoingMessage, onSuccess, onTimeout);
@@ -106,10 +102,10 @@ const Messages = () => {
                 value={formik.values.body}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                disabled={isSending}
+                disabled={formik.isSubmitting}
               />
               <div className="input-group-append">
-                <Button variant="group-vertical" type="submit" name="Отправить" disabled={isSending}>
+                <Button variant="group-vertical" type="submit" name="Отправить" disabled={formik.isSubmitting}>
                   <ArrowRightSquare width="30" height="30" />
                   <span className="visually-hidden">{t('buttons.send')}</span>
                 </Button>

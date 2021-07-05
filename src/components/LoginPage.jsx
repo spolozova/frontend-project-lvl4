@@ -15,7 +15,7 @@ const LoginPage = () => {
   const { t } = useTranslation();
   // @ts-ignore
   const { logIn } = useAuth();
-  const [authState, setAuthState] = useState({ isSending: false, authError: null });
+  const [authError, setAuthError] = useState(null);
   const history = useHistory();
   const inputRef = useRef(null);
 
@@ -29,10 +29,10 @@ const LoginPage = () => {
       password: '',
     },
     onSubmit: async (values) => {
-      setAuthState({ isSending: true, authError: null });
+      setAuthError(null);
       const validError = validate('login', values);
       if (validError) {
-        setAuthState({ isSending: false, authError: t(`validationErrors.${validError}`) });
+        setAuthError(t(`validationErrors.${validError}`));
         return;
       }
       try {
@@ -41,16 +41,11 @@ const LoginPage = () => {
         logIn();
         history.replace({ pathname: '/' });
       } catch (err) {
-        setAuthState({
-          isSending: false,
-          authError: t([`authErrors.${err.response.status}`, 'authErrors.unspecific']),
-        });
+        setAuthError(t([`authErrors.${err.response.status}`, 'authErrors.unspecific']));
         inputRef.current.focus();
       }
     },
   });
-
-  const { isSending, authError } = authState;
 
   return (
     <div className="container-fluid flex-grow-1">
@@ -74,7 +69,7 @@ const LoginPage = () => {
                     isInvalid={authError}
                     required
                     ref={inputRef}
-                    disabled={isSending}
+                    disabled={formik.isSubmitting}
                   />
                   <Form.Label htmlFor="username">{t('forms.loginForm.username')}</Form.Label>
                 </Form.Group>
@@ -89,14 +84,14 @@ const LoginPage = () => {
                     autoComplete="current-password"
                     isInvalid={authError}
                     required
-                    disabled={isSending}
+                    disabled={formik.isSubmitting}
                   />
                   <Form.Label htmlFor="password">{t('forms.password')}</Form.Label>
                   <Form.Control.Feedback type="invalid">{authError}</Form.Control.Feedback>
                 </Form.Group>
                 <Button
                   type="submit"
-                  disabled={isSending}
+                  disabled={formik.isSubmitting}
                   className="w-100 mb-3 btn"
                   variant="outline-primary"
                 >

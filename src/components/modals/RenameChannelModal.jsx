@@ -14,7 +14,7 @@ const RemoveChannelModal = () => {
   const dispatch = useDispatch();
   const { renameChannel } = useSocket();
   const inputRef = useRef();
-  const [sendingStatus, setSendingStatus] = useState({ isSending: false, error: null });
+  const [error, setError] = useState(null);
   const { t } = useTranslation();
   useEffect(() => {
     inputRef.current.focus();
@@ -26,23 +26,23 @@ const RemoveChannelModal = () => {
       name: modal.extra.name,
     },
     onSubmit: (values) => {
-      setSendingStatus({ isSending: true, error: null });
+      setError(null);
       const channelsNames = channelsInfo.channels.map((c) => c.name);
       const validError = validate('updateChannel', values, channelsNames);
       if (validError) {
-        setSendingStatus({ isSending: false, error: t(`validationErrors.${validError}`) });
+        setError(t(`validationErrors.${validError}`));
         inputRef.current.focus();
         inputRef.current.select();
         return;
       }
       const data = { name: values.name, id: modal.extra.channelId };
       const onSuccess = () => {
-        setSendingStatus({ isSending: false, error: null });
+        setError(null);
         dispatch(closeModal());
       };
 
       const onTimeout = () => {
-        setSendingStatus({ isSending: false, error: t('authErrors.unspecific') });
+        setError(t('authErrors.unspecific'));
         inputRef.current.focus();
         inputRef.current.select();
       };
@@ -50,8 +50,6 @@ const RemoveChannelModal = () => {
       renameChannel(data, onSuccess, onTimeout);
     },
   });
-
-  const { isSending, error } = sendingStatus;
 
   return (
     <>
@@ -74,7 +72,7 @@ const RemoveChannelModal = () => {
               onBlur={formik.handleBlur}
               isInvalid={error}
               required
-              disabled={isSending}
+              disabled={formik.isSubmitting}
             />
             <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
             <div className="d-flex justify-content-end">
@@ -82,12 +80,12 @@ const RemoveChannelModal = () => {
                 type="button"
                 className="me-2"
                 variant="secondary"
-                disabled={isSending}
+                disabled={formik.isSubmitting}
                 onClick={() => dispatch(closeModal())}
               >
                 {t('buttons.cancel')}
               </Button>
-              <Button type="submit" disabled={isSending} variant="primary">{t('buttons.send')}</Button>
+              <Button type="submit" disabled={formik.isSubmitting} variant="primary">{t('buttons.send')}</Button>
             </div>
           </Form.Group>
         </Form>
