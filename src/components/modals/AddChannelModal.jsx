@@ -7,13 +7,13 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { setCurrentChannel } from '../../slices/channelsSlicer';
 import { closeModal } from '../../slices/modalSlicer.js';
-import { useSocket } from '../../hooks';
+import { useSocketApi } from '../../hooks';
 import { validate } from '../../validation/validationScheme.js';
 
 const AddChannelModal = () => {
   const { channelsInfo } = useSelector((state) => state);
   const dispatch = useDispatch();
-  const { addChannel } = useSocket();
+  const { addChannel } = useSocketApi();
   const addChannelRef = useRef();
   const [error, setError] = useState(null);
   const { t } = useTranslation();

@@ -7,7 +7,7 @@ import { initReactI18next } from 'react-i18next';
 import resources from './locales/index.js';
 import getSocketApi from './socketApi.js';
 import store from './store.js';
-import { SocketContext } from './contexts/index.jsx';
+import { SocketApiContext } from './contexts/index.jsx';
 import { addMessage } from './slices/messagesSlicer.js';
 import { addChannel, removeChannel, renameChannel } from './slices/channelsSlicer.js';
 import App from './components/App.jsx';
@@ -45,13 +45,13 @@ export default async (socketClient) => {
     store.dispatch(renameChannel(channel));
   });
 
-  const socket = getSocketApi(socketClient);
+  const socketApi = getSocketApi(socketClient);
 
   return (
     <Provider store={store}>
-      <SocketContext.Provider value={socket}>
+      <SocketApiContext.Provider value={socketApi}>
         <App />
-      </SocketContext.Provider>
+      </SocketApiContext.Provider>
     </Provider>
   );
 };

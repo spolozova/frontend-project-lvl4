@@ -6,13 +6,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { closeModal } from '../../slices/modalSlicer.js';
-import { useSocket } from '../../hooks';
+import { useSocketApi } from '../../hooks';
 import { validate } from '../../validation/validationScheme.js';
 
 const RemoveChannelModal = () => {
   const { channelsInfo, modal } = useSelector((state) => state);
   const dispatch = useDispatch();
-  const { renameChannel } = useSocket();
+  const { renameChannel } = useSocketApi();
   const inputRef = useRef();
   const [error, setError] = useState(null);
   const { t } = useTranslation();

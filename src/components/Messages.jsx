@@ -12,7 +12,7 @@ import { ArrowRightSquare } from 'react-bootstrap-icons';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useSocket } from '../hooks';
+import { useSocketApi } from '../hooks';
 
 const getMessagesList = (messages, currentId) => messages
   .filter(({ channelId }) => channelId === currentId)
@@ -32,7 +32,7 @@ const Messages = () => {
   const currentChannel = channels.length === 0 ? null : _.find(channels, ['id', currentChannelId]);
   const messageInputRef = useRef(null);
   const messagesListRef = useRef(null);
-  const { sendNewMessage } = useSocket();
+  const { sendNewMessage } = useSocketApi();
   const { t } = useTranslation();
 
   useEffect(() => {
