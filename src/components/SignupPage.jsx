@@ -43,8 +43,7 @@ const SignupPage = () => {
       });
       try {
         const resp = await axios.post(routes.signupPath(), values);
-        localStorage.setItem('userId', JSON.stringify(resp.data));
-        logIn();
+        logIn(JSON.stringify(resp.data));
         setState({
           isAuthorized: true,
           authError: null,
@@ -67,6 +66,7 @@ const SignupPage = () => {
     errors,
     handleChange,
   } = formik;
+
   return (
     <div className="container-fluid flex-grow-1">
       <div className="row justify-content-center align-content-center h-100">
@@ -95,7 +95,7 @@ const SignupPage = () => {
                   <Form.Label htmlFor="username">{t('forms.signupForm.username')}</Form.Label>
 
                   <Form.Control.Feedback type="invalid">
-                    {t(`validationErrors.${errors.username}`)}
+                    {errors.username && t(`validationErrors.${errors.username}`)}
                   </Form.Control.Feedback>
                 </Form.Group>
 
@@ -116,7 +116,7 @@ const SignupPage = () => {
                   <Form.Label htmlFor="password">{t('forms.password')}</Form.Label>
 
                   <Form.Control.Feedback type="invalid">
-                    {t(`validationErrors.${errors.password}`)}
+                    {errors.password && t(`validationErrors.${errors.password}`)}
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="form-floating mb-3 position-relative">

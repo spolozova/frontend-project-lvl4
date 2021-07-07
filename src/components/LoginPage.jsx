@@ -37,8 +37,7 @@ const LoginPage = () => {
       }
       try {
         const resp = await axios.post(routes.loginPath(), values);
-        localStorage.setItem('userId', JSON.stringify(resp.data));
-        logIn();
+        logIn(JSON.stringify(resp.data));
         history.replace({ pathname: '/' });
       } catch (err) {
         setAuthError(t([`authErrors.${err.response.status}`, 'authErrors.unspecific']));

@@ -9,17 +9,12 @@ import Messages from './Messages.jsx';
 import Channels from './Channels.jsx';
 import { fetchChannels } from '../slices/channelsSlicer.js';
 import routes from '../routes';
-
-const getAuthHeader = () => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
-  if (userId && userId.token) {
-    return { Authorization: `Bearer ${userId.token}` };
-  }
-  return {};
-};
+import { useAuth } from '../hooks';
 
 const ChatPage = () => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  // @ts-ignore
+  const { getAuthHeader } = useAuth();
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -41,7 +36,7 @@ const ChatPage = () => {
     return () => {
       cleanupFunction = true;
     };
-  }, [dispatch]);
+  }, [dispatch, getAuthHeader]);
 
   if (isDataLoaded) {
     return (

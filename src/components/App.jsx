@@ -12,18 +12,35 @@ import NotFoundPage from './NotFoundPage.jsx';
 import ModalComponent from './modals/index.jsx';
 import SignupPage from './SignupPage.jsx';
 import NavBar from './NavBar.jsx';
-import { AuthContext } from '../contexts/index.jsx';
-import { useAuth } from '../hooks/index.jsx';
+import { AuthContext } from '../contexts';
+import { useAuth } from '../hooks';
 
 const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(!!localStorage.userId);
-  const logIn = () => setLoggedIn(true);
+  const [loggedIn, setLoggedIn] = useState(!!localStorage.userData);
+  const logIn = (data) => {
+    localStorage.setItem('userData', data);
+    setLoggedIn(true);
+  };
   const logOut = () => {
-    localStorage.removeItem('userId');
+    localStorage.removeItem('userData');
     setLoggedIn(false);
   };
+  const getAuthHeader = () => {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (userData && userData.token) {
+      return { Authorization: `Bearer ${userData.token}` };
+    }
+    return {};
+  };
+
   return (
-    <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
+    <AuthContext.Provider value={{
+      loggedIn,
+      logIn,
+      logOut,
+      getAuthHeader,
+    }}
+    >
       {children}
     </AuthContext.Provider>
   );
