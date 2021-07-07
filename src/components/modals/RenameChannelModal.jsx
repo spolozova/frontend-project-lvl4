@@ -16,6 +16,7 @@ const RemoveChannelModal = () => {
   const inputRef = useRef();
   const [error, setError] = useState(null);
   const { t } = useTranslation();
+
   useEffect(() => {
     inputRef.current.focus();
     inputRef.current.select();
@@ -25,7 +26,7 @@ const RemoveChannelModal = () => {
     initialValues: {
       name: modal.extra.name,
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       setError(null);
       const channelsNames = channelsInfo.channels.map((c) => c.name);
       const validError = validate('updateChannel', values, channelsNames);
@@ -47,7 +48,7 @@ const RemoveChannelModal = () => {
         inputRef.current.select();
       };
 
-      renameChannel(data, onSuccess, onTimeout);
+      await renameChannel(data, onSuccess, onTimeout);
     },
   });
 
@@ -60,7 +61,7 @@ const RemoveChannelModal = () => {
 
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={formik.handleSubmit}>
+        <Form noValidate onSubmit={formik.handleSubmit}>
           <Form.Group>
             <Form.Control
               ref={inputRef}

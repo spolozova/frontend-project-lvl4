@@ -13,6 +13,7 @@ import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useSocketApi } from '../hooks';
+import { validate } from '../validation/validationScheme.js';
 
 const getMessagesList = (messages, currentId) => messages
   .filter(({ channelId }) => channelId === currentId)
@@ -34,6 +35,7 @@ const Messages = () => {
   const messagesListRef = useRef(null);
   const { sendNewMessage } = useSocketApi();
   const { t } = useTranslation();
+  const currentMessagesList = getMessagesList(messages, currentChannelId);
 
   useEffect(() => {
     if (messages.length !== 0) {
@@ -44,14 +46,19 @@ const Messages = () => {
 
   useEffect(() => {
     messageInputRef.current.focus();
-  }, [currentChannelId, channels]);
+  }, [channels, currentChannelId]);
 
   const formik = useFormik({
     initialValues: {
       body: '',
     },
 
-    onSubmit: ({ body }) => {
+    onSubmit: async ({ body }) => {
+      const validError = validate('message', body);
+      if (validError) {
+        messageInputRef.current.focus();
+        return;
+      }
       const { username } = JSON.parse(localStorage.getItem('userData'));
       const outgoingMessage = {
         body,
@@ -67,11 +74,10 @@ const Messages = () => {
       const onTimeout = () => {
         messageInputRef.current.focus();
       };
-      sendNewMessage(outgoingMessage, onSuccess, onTimeout);
+      await sendNewMessage(outgoingMessage, onSuccess, onTimeout);
     },
   });
 
-  const currentMessagesList = getMessagesList(messages, currentChannelId);
   return (
     <Col className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
@@ -90,7 +96,7 @@ const Messages = () => {
           {currentMessagesList}
         </div>
         <div className="mt-auto py-3 px-5">
-          <Form className="py-1 border rounded-2" onSubmit={formik.handleSubmit}>
+          <Form className="py-1 border rounded-2" autoComplete="nope" noValidate onSubmit={formik.handleSubmit}>
             <InputGroup>
               <FormControl
                 required

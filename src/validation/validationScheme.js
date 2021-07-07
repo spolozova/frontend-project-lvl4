@@ -22,6 +22,7 @@ const validationScheme = {
     confirmPassword: yup.string().trim()
       .oneOf([yup.ref('password'), null]),
   }),
+  message: () => yup.string().required(),
 };
 
 export const getSchema = (type, list = []) => validationScheme[type](list);

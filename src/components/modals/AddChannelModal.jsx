@@ -20,7 +20,7 @@ const AddChannelModal = () => {
 
   useEffect(() => {
     addChannelRef.current.focus();
-  }, []);
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -60,7 +60,7 @@ const AddChannelModal = () => {
 
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={formik.handleSubmit}>
+        <Form noValidate onSubmit={formik.handleSubmit}>
           <Form.Group>
             <Form.Control
               ref={addChannelRef}
