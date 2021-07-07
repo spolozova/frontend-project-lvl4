@@ -7,7 +7,7 @@ import { initReactI18next } from 'react-i18next';
 import resources from './locales/index.js';
 import getSocketApi from './socketApi.js';
 import store from './store.js';
-import { SocketApiContext } from './contexts/index.jsx';
+import { SocketApiContext } from './contexts';
 import { addMessage } from './slices/messagesSlicer.js';
 import { addChannel, removeChannel, renameChannel } from './slices/channelsSlicer.js';
 import App from './components/App.jsx';

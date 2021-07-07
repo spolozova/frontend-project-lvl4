@@ -44,7 +44,7 @@ const Messages = () => {
 
   useEffect(() => {
     messageInputRef.current.focus();
-  }, []);
+  }, [currentChannelId, channels]);
 
   const formik = useFormik({
     initialValues: {
@@ -52,7 +52,7 @@ const Messages = () => {
     },
 
     onSubmit: ({ body }) => {
-      const { username } = JSON.parse(localStorage.getItem('userId'));
+      const { username } = JSON.parse(localStorage.getItem('userData'));
       const outgoingMessage = {
         body,
         channelId: currentChannelId,

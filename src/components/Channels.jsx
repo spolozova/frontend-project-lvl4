@@ -45,6 +45,7 @@ const Channels = () => {
             <Dropdown.Toggle split variant={variant} className="flex-grow-0" id="dropdown-split-basic" />
             <Dropdown.Menu>
               <Dropdown.Item
+                active={false}
                 href="#"
                 onClick={() => dispatch(openModal({ type: 'removeChannel', channelId: id }))}
               >
@@ -52,6 +53,7 @@ const Channels = () => {
               </Dropdown.Item>
               <Dropdown.Item
                 href="#"
+                active={false}
                 onClick={() => dispatch(openModal({ type: 'renameChannel', channelId: id, name }))}
               >
                 {t('buttons.rename')}

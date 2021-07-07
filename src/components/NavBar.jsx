@@ -16,8 +16,8 @@ const LanguageButton = () => {
   return (
     <Nav className="mr-auto">
       <NavDropdown title={t(`languages.${lng}`)} id="basic-nav-dropdown">
-        <NavDropdown.Item role="button" href="#" onClick={() => i18n.changeLanguage('ru')}>{t('languages.ru')}</NavDropdown.Item>
-        <NavDropdown.Item role="button" href="#" onClick={() => i18n.changeLanguage('en')}>{t('languages.en')}</NavDropdown.Item>
+        <NavDropdown.Item active={false} href="#" onClick={() => i18n.changeLanguage('ru')}>{t('languages.ru')}</NavDropdown.Item>
+        <NavDropdown.Item active={false} href="#" onClick={() => i18n.changeLanguage('en')}>{t('languages.en')}</NavDropdown.Item>
       </NavDropdown>
     </Nav>
   );
