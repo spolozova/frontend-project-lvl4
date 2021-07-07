@@ -18,11 +18,11 @@ const messagesInfo = createSlice({
     builder
       .addCase(fetchChannels, (state, action) => {
         const { messages } = action.payload;
-        state.messages = [...messages];
+        state.messages = messages;
       })
       .addCase(removeChannel, (state, action) => {
         const { id } = action.payload;
-        state.messages.filter((message) => message.channelId !== id);
+        state.messages = state.messages.filter((message) => message.channelId !== id);
       });
   },
 });

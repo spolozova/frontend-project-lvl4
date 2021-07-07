@@ -10,7 +10,8 @@ const channelsInfo = createSlice({
   reducers: {
     fetchChannels: (state, action) => {
       const { channels, currentChannelId } = action.payload;
-      return { channels, currentChannelId };
+      state.channels = channels;
+      state.currentChannelId = currentChannelId;
     },
     setCurrentChannel: (state, action) => {
       const { id } = action.payload;
