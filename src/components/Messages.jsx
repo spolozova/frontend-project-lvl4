@@ -96,7 +96,7 @@ const Messages = () => {
           {currentMessagesList}
         </div>
         <div className="mt-auto py-3 px-5">
-          <Form className="py-1 border rounded-2" autoComplete="nope" noValidate onSubmit={formik.handleSubmit}>
+          <Form className="py-1 border rounded-2" autoComplete="off" noValidate onSubmit={formik.handleSubmit}>
             <InputGroup>
               <FormControl
                 required
