@@ -27,7 +27,7 @@ const AuthButton = () => {
   const auth = useContext(AuthContext);
   const { t } = useTranslation();
   return (
-    auth.loggedIn
+    auth.userData
       ? <Button onClick={auth.logOut} className="ms-auto">{t('navBar.logout')}</Button>
       : null
   );

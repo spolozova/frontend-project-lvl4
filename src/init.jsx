@@ -1,6 +1,7 @@
 // @ts-check
 
 import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
@@ -10,6 +11,7 @@ import store from './store.js';
 import { SocketApiContext } from './contexts';
 import { addMessage } from './slices/messagesSlicer.js';
 import { addChannel, removeChannel, renameChannel } from './slices/channelsSlicer.js';
+import Authprovider from './auth';
 import App from './components/App.jsx';
 import '../assets/application.scss';
 
@@ -50,7 +52,11 @@ export default async (socketClient) => {
   return (
     <Provider store={store}>
       <SocketApiContext.Provider value={socketApi}>
-        <App />
+        <Authprovider>
+          <Router>
+            <App />
+          </Router>
+        </Authprovider>
       </SocketApiContext.Provider>
     </Provider>
   );

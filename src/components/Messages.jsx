@@ -1,4 +1,4 @@
-// @ts-check
+// @ts-nocheck
 import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import {
@@ -12,7 +12,7 @@ import { ArrowRightSquare } from 'react-bootstrap-icons';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useSocketApi } from '../hooks';
+import { useSocketApi, useAuth } from '../hooks';
 import { validate } from '../validation/validationScheme.js';
 
 const getMessagesList = (messages, currentId) => messages
@@ -28,12 +28,13 @@ const getMessagesList = (messages, currentId) => messages
 const Messages = () => {
   // @ts-ignore
   const { messages } = useSelector((state) => state.messagesInfo);
-  // @ts-ignore
   const { channels, currentChannelId } = useSelector((state) => state.channelsInfo);
+  const { isOpened } = useSelector((state) => state.modal);
   const currentChannel = channels.length === 0 ? null : _.find(channels, ['id', currentChannelId]);
   const messageInputRef = useRef(null);
   const messagesListRef = useRef(null);
   const { sendNewMessage } = useSocketApi();
+  const { userData } = useAuth();
   const { t } = useTranslation();
   const currentMessagesList = getMessagesList(messages, currentChannelId);
 
@@ -45,8 +46,10 @@ const Messages = () => {
   }, [messages]);
 
   useEffect(() => {
-    messageInputRef.current.focus();
-  }, [channels, currentChannelId]);
+    if (!isOpened) {
+      messageInputRef.current.focus();
+    }
+  }, [isOpened, currentChannelId]);
 
   const formik = useFormik({
     initialValues: {
@@ -59,11 +62,10 @@ const Messages = () => {
         messageInputRef.current.focus();
         return;
       }
-      const { username } = JSON.parse(localStorage.getItem('userData'));
       const outgoingMessage = {
         body,
         channelId: currentChannelId,
-        username,
+        username: userData.username,
       };
 
       const onSuccess = () => {
