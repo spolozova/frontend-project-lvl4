@@ -99,6 +99,7 @@ const Messages = () => {
           <Form className="py-1 border rounded-2" autoComplete="off" noValidate onSubmit={formik.handleSubmit}>
             <InputGroup>
               <FormControl
+                autoComplete="off"
                 required
                 ref={messageInputRef}
                 name="body"
