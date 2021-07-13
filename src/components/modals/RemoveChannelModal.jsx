@@ -8,6 +8,8 @@ import { closeModal } from '../../slices/modalSlicer.js';
 import { useSocketApi } from '../../hooks';
 import { setCurrentChannel } from '../../slices/channelsSlicer';
 
+const DEFAULT_CHANNEL_ID = 1;
+
 const RemoveChannelModal = () => {
   const dispatch = useDispatch();
   const { extra } = useSelector((state) => state.modal);
@@ -15,17 +17,17 @@ const RemoveChannelModal = () => {
   const [isSending, setSendingStatus] = useState(false);
   const { t } = useTranslation();
 
-  const onSuccess = ({ data }) => {
+  const onSuccess = () => {
     setSendingStatus(false);
-    dispatch(setCurrentChannel({ id: data.id }));
+    dispatch(setCurrentChannel({ id: DEFAULT_CHANNEL_ID }));
     dispatch(closeModal());
   };
 
   const onTimeout = () => setSendingStatus(false);
 
-  const handleRemove = () => {
+  const handleRemove = async () => {
     setSendingStatus(true);
-    removeChannel({ id: extra.channelId }, onSuccess, onTimeout);
+    await removeChannel({ id: extra.channelId }, onSuccess, onTimeout);
   };
 
   return (
