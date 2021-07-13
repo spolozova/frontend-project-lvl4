@@ -26,7 +26,7 @@ const Channels = () => {
     if (!isValidCurrentId) {
       dispatch(setCurrentChannel({ id: DEFAULT_CHANNEL_ID }));
     }
-  }, [channels]);
+  }, [channels, currentChannelId, dispatch]);
 
   const renderChannelsList = (channel) => {
     const { id, name, removable } = channel;
