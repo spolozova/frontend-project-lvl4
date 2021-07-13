@@ -26,7 +26,7 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin(),
     new webpack.DefinePlugin({
-      'process.env.ROLLBAR_ACCESS_TOKEN': JSON.stringify('3304fc7414d24faabb91eb38a1e718da'),
+      'process.env.ROLLBAR_ACCESS_TOKEN': JSON.stringify(process.env.ROLLBAR_TOKEN),
     }),
   ],
   devtool: 'source-map',

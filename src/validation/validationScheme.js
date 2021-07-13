@@ -1,4 +1,16 @@
-import yup from './validationLocale.js';
+import * as yup from 'yup';
+
+yup.setLocale({
+  mixed: {
+    required: 'required',
+    notOneOf: 'unique',
+    oneOf: 'confirmPassword',
+  },
+  string: {
+    required: 'required',
+    max: 'nameLength',
+  },
+});
 
 const validationScheme = {
   login: () => yup.object({
@@ -7,18 +19,18 @@ const validationScheme = {
   }),
   updateChannel: (list) => yup.object({
     name: yup.string().trim().required()
-      .min(3)
+      .min(3, 'nameLength')
       .max(20)
       .notOneOf(list),
   }),
   signup: () => yup.object({
     username: yup.string().trim()
       .required()
-      .min(3)
+      .min(3, 'nameLength')
       .max(20),
     password: yup.string().trim()
       .required()
-      .min(6),
+      .min(6, 'passwordLength'),
     confirmPassword: yup.string().trim()
       .oneOf([yup.ref('password'), null]),
   }),

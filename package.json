@@ -31,6 +31,7 @@
     "classnames": "^2.3.1",
     "core-js": "^3.12.1",
     "debug": "^4.3.1",
+    "dotenv": "^10.0.0",
     "fastify": "^3.15.1",
     "fastify-formbody": "^5.0.0",
     "fastify-jwt": "^2.4.0",
@@ -44,6 +45,7 @@
     "immer": "^9.0.2",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
+    "mini-css-extract-plugin": "^1.6.0",
     "pino-pretty": "^4.8.0",
     "point-of-view": "^4.14.0",
     "popper.js": "^1.16.1",
@@ -59,11 +61,10 @@
     "rollbar": "^2.22.0",
     "socket.io-client": "^4.1.2",
     "use-immer": "^0.5.2",
-    "yup": "^0.32.9",
     "webpack": "^5.37.0",
     "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2",
-    "mini-css-extract-plugin": "^1.6.0"
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.16",
