@@ -18,7 +18,7 @@ const Channels = () => {
   const { channels, currentChannelId } = useSelector((state) => state.channelsInfo);
   const dispatch = useDispatch();
   const { t } = useTranslation();
-
+  console.log(currentChannelId);
   const renderChannelsList = (channel) => {
     const { id, name, removable } = channel;
     const variant = currentChannelId === id ? 'secondary' : 'light';
