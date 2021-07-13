@@ -35,6 +35,7 @@ const Messages = () => {
   const messagesListRef = useRef(null);
   const { sendNewMessage } = useSocketApi();
   const { userData } = useAuth();
+  const { username } = JSON.parse(userData);
   const { t } = useTranslation();
   const currentMessagesList = getMessagesList(messages, currentChannelId);
 
@@ -65,7 +66,7 @@ const Messages = () => {
       const outgoingMessage = {
         body,
         channelId: currentChannelId,
-        username: userData.username,
+        username,
       };
 
       const onSuccess = () => {

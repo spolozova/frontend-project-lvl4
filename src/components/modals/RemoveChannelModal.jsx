@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { closeModal } from '../../slices/modalSlicer.js';
 import { useSocketApi } from '../../hooks';
+import { setCurrentChannel } from '../../slices/channelsSlicer';
 
 const RemoveChannelModal = () => {
   const dispatch = useDispatch();
@@ -14,8 +15,9 @@ const RemoveChannelModal = () => {
   const [isSending, setSendingStatus] = useState(false);
   const { t } = useTranslation();
 
-  const onSuccess = () => {
+  const onSuccess = ({ data }) => {
     setSendingStatus(false);
+    dispatch(setCurrentChannel({ id: data.id }));
     dispatch(closeModal());
   };
 

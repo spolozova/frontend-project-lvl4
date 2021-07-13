@@ -15,7 +15,7 @@ const LoginPage = () => {
   const { t } = useTranslation();
   // @ts-ignore
   const { logIn } = useAuth();
-  const [authError, setAuthError] = useState(null);
+  const [errors, setErrors] = useState({ validationError: null, authError: null });
   const history = useHistory();
   const inputRef = useRef(null);
 
@@ -29,10 +29,11 @@ const LoginPage = () => {
       password: '',
     },
     onSubmit: async (values) => {
-      setAuthError(null);
+      setErrors({ validationError: null, authError: null });
       const validError = validate('login', values);
+      console.log(validError);
       if (validError) {
-        setAuthError(t(`validationErrors.${validError}`));
+        setErrors({ validationError: validError, authError: null });
         return;
       }
       try {
@@ -40,11 +41,13 @@ const LoginPage = () => {
         logIn(JSON.stringify(resp.data));
         history.replace({ pathname: '/' });
       } catch (err) {
-        setAuthError(t([`authErrors.${err.response.status}`, 'authErrors.unspecific']));
+        setErrors({ validationError: null, authError: err.response.status });
         inputRef.current.focus();
       }
     },
   });
+
+  const { validationError, authError } = errors;
 
   return (
     <div className="container-fluid flex-grow-1">
@@ -65,7 +68,7 @@ const LoginPage = () => {
                     name="username"
                     id="username"
                     autoComplete="username"
-                    isInvalid={authError}
+                    isInvalid={authError || validationError}
                     required
                     ref={inputRef}
                     disabled={formik.isSubmitting}
@@ -81,12 +84,15 @@ const LoginPage = () => {
                     name="password"
                     id="password"
                     autoComplete="current-password"
-                    isInvalid={authError}
+                    isInvalid={authError || validationError}
                     required
                     disabled={formik.isSubmitting}
                   />
                   <Form.Label htmlFor="password">{t('forms.password')}</Form.Label>
-                  <Form.Control.Feedback type="invalid">{authError}</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    {validationError
+                      ? t(`validationErrors.${validationError}`) : t([`authErrors.${authError}`, 'authErrors.unspecific'])}
+                  </Form.Control.Feedback>
                 </Form.Group>
                 <Button
                   type="submit"
