@@ -14,11 +14,21 @@ extends:
 env:
   browser: true
   node: true
+  es2021: true
+
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: 12
+  sourceType: module
 
  settings:
-  import/resolver:
-    - node
-    - webpack
+   import/resolver:
+     webpack:
+     node:
+      webpack:
+    react:
+      version: "latest"
 
 rules:
   import/extensions: 0

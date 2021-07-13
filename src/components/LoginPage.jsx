@@ -31,7 +31,6 @@ const LoginPage = () => {
     onSubmit: async (values) => {
       setErrors({ validationError: null, authError: null });
       const validError = validate('login', values);
-      console.log(validError);
       if (validError) {
         setErrors({ validationError: validError, authError: null });
         return;
