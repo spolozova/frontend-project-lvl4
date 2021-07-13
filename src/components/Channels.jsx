@@ -1,5 +1,5 @@
 // @ts-check
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Col,
   Nav,
@@ -13,16 +13,24 @@ import { useTranslation } from 'react-i18next';
 import { setCurrentChannel } from '../slices/channelsSlicer.js';
 import { openModal } from '../slices/modalSlicer.js';
 
+const DEFAULT_CHANNEL_ID = 1;
+
 const Channels = () => {
   // @ts-ignore
   const { channels, currentChannelId } = useSelector((state) => state.channelsInfo);
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  console.log(currentChannelId);
+
+  useEffect(() => {
+    const isValidCurrentId = channels.some(({ id }) => id === currentChannelId);
+    if (!isValidCurrentId) {
+      dispatch(setCurrentChannel({ id: DEFAULT_CHANNEL_ID }));
+    }
+  }, [channels]);
+
   const renderChannelsList = (channel) => {
     const { id, name, removable } = channel;
     const variant = currentChannelId === id ? 'secondary' : 'light';
-
     if (removable) {
       return (
         <Nav.Item key={id} as="li">
@@ -47,14 +55,14 @@ const Channels = () => {
               <Dropdown.Item
                 active={false}
                 href="#"
-                onClick={() => dispatch(openModal({ type: 'removeChannel', channelId: id }))}
+                onClick={() => dispatch(openModal({ type: 'removeChannel', extra: { channelId: id } }))}
               >
                 {t('buttons.delete')}
               </Dropdown.Item>
               <Dropdown.Item
                 href="#"
                 active={false}
-                onClick={() => dispatch(openModal({ type: 'renameChannel', channelId: id, name }))}
+                onClick={() => dispatch(openModal({ type: 'renameChannel', extra: { channelId: id, name } }))}
               >
                 {t('buttons.rename')}
               </Dropdown.Item>
@@ -82,7 +90,7 @@ const Channels = () => {
     <Col className="col-4 col-md-2 border-end pt-5 px-0 bg-light">
       <div className="d-flex justify-content-between mb-2 ps-4 px-4">
         <span>{t('chatPage.channels')}</span>
-        <Button type="button" variant="group-vertical" className="p-0 text-primary" onClick={() => dispatch(openModal({ type: 'addChannel' }))}>
+        <Button type="button" variant="group-vertical" className="p-0 text-primary" onClick={() => dispatch(openModal({ type: 'addChannel', extra: null }))}>
           <PlusSquare width="20" height="20" />
           <span className="visually-hidden">+</span>
         </Button>

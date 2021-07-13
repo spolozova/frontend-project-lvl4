@@ -8,8 +8,6 @@ import { closeModal } from '../../slices/modalSlicer.js';
 import { useSocketApi } from '../../hooks';
 import { setCurrentChannel } from '../../slices/channelsSlicer';
 
-const DEFAULT_CHANNEL_ID = 1;
-
 const RemoveChannelModal = () => {
   const dispatch = useDispatch();
   const { extra } = useSelector((state) => state.modal);
@@ -19,7 +17,6 @@ const RemoveChannelModal = () => {
 
   const onSuccess = () => {
     setSendingStatus(false);
-    dispatch(setCurrentChannel({ id: DEFAULT_CHANNEL_ID }));
     dispatch(closeModal());
   };
 

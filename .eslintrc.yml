@@ -14,23 +14,14 @@ extends:
 env:
   browser: true
   node: true
-  # es2020: true
-
-# parserOptions:
-#   ecmaVersion: 2020
 
  settings:
-   import/resolver:
-    webpack:
-     node:
-     webpack:
-  react:
-     version: "16.13"
+  import/resolver:
+    - node
+    - webpack
 
 rules:
   import/extensions: 0
-  # TODO: cause an error
-  # react/jsx-filename-extension: 0
   react/prop-types: 0
   no-console: 0
   functional/no-conditional-statement: 0

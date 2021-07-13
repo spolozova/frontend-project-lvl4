@@ -9,7 +9,7 @@ const modal = createSlice({
   },
   reducers: {
     openModal: (state, action) => {
-      const { type, ...extra } = action.payload;
+      const { type, extra } = action.payload;
       return { isOpened: true, type, extra };
     },
     closeModal: () => ({ isOpened: false, type: null, extra: null }),
